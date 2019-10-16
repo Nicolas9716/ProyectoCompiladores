@@ -2,6 +2,10 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import co.nicolaspr.analizadorLexico.Token;
+
 public class UnidadDeCompilacion {
 	private ArrayList<Funcion> listaFunciones;
 
@@ -11,7 +15,25 @@ public class UnidadDeCompilacion {
 	 * @param listaFunciones
 	 */
 	public UnidadDeCompilacion(ArrayList<Funcion> listaFunciones) {
+		super();
 		this.listaFunciones = listaFunciones;
+	}
+
+	@Override
+	public String toString() {
+		return "UnidadDeCompilacion [listaFunciones=" + listaFunciones + "]";
+	}
+
+	public DefaultMutableTreeNode getArbolVisual() {
+
+		DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Unidad de Compilacion");
+
+		for (Funcion funcion : listaFunciones) {
+			raiz.add(funcion.getArbolVisual());
+		}
+
+		return raiz;
+
 	}
 
 }

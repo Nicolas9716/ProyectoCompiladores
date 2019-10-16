@@ -14,13 +14,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import co.nicolaspr.analizadorLexico.AnalizadorLexico;
 import co.nicolaspr.analizadorLexico.ErrorLexico;
 import co.nicolaspr.analizadorLexico.Token;
+import co.nicolaspr.analizadorSintactico.AnalizadorSintactico;
 /**
  * Clase de la interfaz principal del programa
  * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
@@ -32,11 +36,13 @@ public class Interfaz extends JFrame implements ActionListener {
 	private JButton btnAnalizar, btnLimpiar;
 	private AnalizadorLexico analizador;
 	private JTable tablaSimbolos, tablaDesconocidos, tablaErrores;
-	private JScrollPane scrollTSimbolos, scrollTDesconocidos, scrollTErrores;
+	private JScrollPane scrollTSimbolos, scrollTDesconocidos, scrollTErrores, scrollSintactico;
 	private DefaultTableModel modelo, modeloDesconocido, modeloError;
 	private ArrayList<Token> lista;
 	private ArrayList<ErrorLexico> listaError;
 	private JPanel contentPane;
+	private JTree arbolVisual;
+	private AnalizadorSintactico analizadorSintactico;
 
 	/**
 	 * Costructor de la clase, se inicializan todos los componentes
@@ -44,7 +50,7 @@ public class Interfaz extends JFrame implements ActionListener {
 	public Interfaz() {
 
 		setLayout(null);
-		setSize(800, 500);
+		setSize(1100, 500);
 		setLocationRelativeTo(null);
 		setTitle("Analizador Lexico");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -132,6 +138,11 @@ public class Interfaz extends JFrame implements ActionListener {
 		scrollTErrores.setBounds(350, 345, 400, 100);
 		scrollTErrores.setVisible(true);
 		contentPane.add(scrollTErrores);
+		
+		arbolVisual = new JTree(new DefaultTreeModel(new DefaultMutableTreeNode("Unidad de Compilacion")));
+		scrollSintactico = new JScrollPane(arbolVisual);
+		scrollSintactico.setBounds(760, 60, 300, 380);
+		contentPane.add(scrollSintactico);
 
 		btnAnalizar = new JButton("Analizar");
 		btnAnalizar.setBounds(60, 380, 100, 30);
@@ -166,6 +177,11 @@ public class Interfaz extends JFrame implements ActionListener {
 			} else {
 				JOptionPane.showMessageDialog(null, "Escriba algo");
 			}
+			analizadorSintactico = new AnalizadorSintactico(analizador.getTablaSimbolos());
+			analizadorSintactico.analizar();
+			DefaultMutableTreeNode tree = analizadorSintactico.getUnidadDeCompilacion().getArbolVisual();
+			arbolVisual.setModel(new DefaultTreeModel(tree));
+			
 		}
 	}
 /**
