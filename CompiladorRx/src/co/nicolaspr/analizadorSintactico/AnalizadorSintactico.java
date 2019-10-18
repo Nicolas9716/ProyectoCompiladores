@@ -77,35 +77,38 @@ public class AnalizadorSintactico {
 	public Funcion esFuncion() {
 
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("fun")) {
+			Token fun = tokenActual;
 			obtenerSiguienteToken();
 
-			if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA) {
+			if (estipoDato()) {
+				Token tipoRetorno = tokenActual;
 				obtenerSiguienteToken();
 
 				if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
-					Token nombre = tokenActual;
+					Token identificador = tokenActual;
 					obtenerSiguienteToken();
 
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+						Token parIzq = tokenActual;
 						obtenerSiguienteToken();
 
 						ArrayList<Parametro> parametros = esListaDeParametro();
 
 						if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+							Token parDer = tokenActual;
 							obtenerSiguienteToken();
-							Token retorno = null;
+
 							if (tokenActual.getCategoria() == Categoria.LLAVE_IZQ) {
+								Token llaveIzq = tokenActual;
 								obtenerSiguienteToken();
-								retorno = esTipoRetorno();
-								obtenerSiguienteToken();
-								
-								if(retorno == null) {
-									reportarError("Debe especificar el tipo de retorno");
-								}
+
+								ArrayList<Sentencia> sentencias = esListaSentencias();
 
 								if (tokenActual.getCategoria() == Categoria.LLAVE_DER) {
-									ArrayList<Sentencia> sentencias = new ArrayList<Sentencia>();
-									return new Funcion(nombre, parametros, retorno, sentencias);
+									Token llaveDer = tokenActual;
+									obtenerSiguienteToken();
+									return new Funcion(fun, tipoRetorno, identificador, parIzq, parametros, parDer,
+											llaveIzq, sentencias, llaveDer);
 								} else {
 									reportarError("Falta llave derechaa");
 								}
@@ -122,10 +125,10 @@ public class AnalizadorSintactico {
 						reportarError("Falta parentesis izquierdo");
 					}
 				} else {
-					reportarError("Debe escribir un nombre para la funcion");
+					reportarError("Falta el nombre de la función");
 				}
 			} else {
-				reportarError("Falt tipo de retorno");
+				reportarError("Falta tipo de retorno");
 			}
 
 		}
@@ -133,13 +136,144 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	private boolean estipoDato() {
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("vacio")
+				|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("entero")
+				|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+						&& tokenActual.getLexema().equals("decimal")
+				|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("cadena")
+				|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+						&& tokenActual.getLexema().equals("logico")) {
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 * <esListaDeParametro>::= <parametro>[<esListaDeParametro>]
+	 * 
+	 */
 	public ArrayList<Parametro> esListaDeParametro() {
+
+		ArrayList<Parametro> parametros = new ArrayList<Parametro>();
+		Parametro p = esParametro();
+
+		while (p != null) {
+			parametros.add(p);
+			p = esParametro();
+		}
+
+		return parametros;
+
+	}
+
+	private Parametro esParametro() {
+		if (estipoDato()) {
+			Token tipoDato = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token identificador = tokenActual;
+				obtenerSiguienteToken();
+				return new Parametro(tipoDato, identificador);
+			}
+		}
+		return null;
+	}
+
+	public ArrayList<Sentencia> esListaSentencias() {
+		ArrayList<Sentencia> sentencias = new ArrayList<Sentencia>();
+		Sentencia s = esSentencia();
+
+		while (s != null) {
+			sentencias.add(s);
+			s = esSentencia();
+		}
+
+		return sentencias;
+
+	}
+
+	private Sentencia esSentencia() {
+		Condicion c = esCondicion();
+		if (c != null) {
+			return new Sentencia(c);
+		}
+
+		DeclaracionDeVariable d = esDeclaracionDeVariable();
+		if (d != null) {
+			return new Sentencia(d);
+		}
+
+		AsignacionDeVariable a = esAsignacion();
+		if (a != null) {
+			return new Sentencia(a);
+		}
+
+		Impresion b = esImpresion();
+		if (b != null) {
+			return new Sentencia(b);
+		}
+
+		Retorno e = esRetorno();
+		if (e != null) {
+			return new Sentencia(e);
+		}
+
+		Leer f = esLectura();
+		if (f != null) {
+			return new Sentencia(f);
+		}
+
+		Ciclo ciclo = esCiclo();
+		if (ciclo != null) {
+			return new Sentencia(ciclo);
+		}
+
+		InvocacionFuncion i = esInvocacion();
+		if (i != null) {
+			return new Sentencia(i);
+		}
 
 		return null;
 	}
 
-	public Token esTipoRetorno() {
+	private InvocacionFuncion esInvocacion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	private Leer esLectura() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Ciclo esCiclo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private DeclaracionDeVariable esDeclaracionDeVariable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Impresion esImpresion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Retorno esRetorno() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Condicion esCondicion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private AsignacionDeVariable esAsignacion() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -171,7 +305,5 @@ public class AnalizadorSintactico {
 	public void setUnidadDeCompilacion(UnidadDeCompilacion unidadDeCompilacion) {
 		this.unidadDeCompilacion = unidadDeCompilacion;
 	}
-	
-	
 
 }

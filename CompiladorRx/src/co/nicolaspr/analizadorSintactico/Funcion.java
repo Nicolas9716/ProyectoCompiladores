@@ -6,33 +6,44 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
 
+/*
+ * 
+ * <Funcion>::=fun<tipoRetorno>identificador"("[<listaParametro>]")""{"[<listaDeSentencia>]"}"
+ */
 public class Funcion {
 
-	private Token nombre;
+	private Token palabraFun, tipoRetorno, identificador, parIzq;
 	private ArrayList<Parametro> parametros;
-	private Token retorno;
+	private Token parDer, llaveIzq;
 	private ArrayList<Sentencia> sentencias;
+	private Token llaveDer;
 
-	public Funcion(Token nombre, ArrayList<Parametro> parametros, Token retorno, ArrayList<Sentencia> sentencias) {
+	public Funcion(Token palabraFun, Token tipoRetorno, Token identificador, Token parIzq,
+			ArrayList<Parametro> parametros, Token parDer, Token llaveIzq, ArrayList<Sentencia> sentencias,
+			Token llaveDer) {
 		super();
-		this.nombre = nombre;
+		this.palabraFun = palabraFun;
+		this.tipoRetorno = tipoRetorno;
+		this.identificador = identificador;
+		this.parIzq = parIzq;
 		this.parametros = parametros;
-		this.retorno = retorno;
+		this.parDer = parDer;
+		this.llaveIzq = llaveIzq;
 		this.sentencias = sentencias;
+		this.llaveDer = llaveDer;
 	}
 
 	@Override
 	public String toString() {
-		return "Funcion [nombre=" + nombre + ", parametros=" + parametros + ", retorno=" + retorno + ", sentencias="
-				+ sentencias + "]";
+		return "Funcion [palabraFun=" + palabraFun + ", tipoRetorno=" + tipoRetorno + ", identificador=" + identificador
+				+ ", parIzq=" + parIzq + ", parametros=" + parametros + ", parDre=" + parDer + ", llaveIzq=" + llaveIzq
+				+ ", sentencias=" + sentencias + ", llaveDer=" + llaveDer + "]";
 	}
 
 	public DefaultMutableTreeNode getArbolVisual() {
 
 		DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Funcion");
-
-		raiz.add(new DefaultMutableTreeNode("Nombre: " + nombre.getLexema()));
-		raiz.add(new DefaultMutableTreeNode("retorno: " + retorno.getLexema()));
+		raiz.add(new DefaultMutableTreeNode(identificador.getLexema()));
 
 		if (parametros != null) {
 			DefaultMutableTreeNode parametrosNodo = new DefaultMutableTreeNode("Parametros");
