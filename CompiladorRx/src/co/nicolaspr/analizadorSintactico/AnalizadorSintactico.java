@@ -238,7 +238,41 @@ public class AnalizadorSintactico {
 	}
 
 	private InvocacionFuncion esInvocacion() {
-		// TODO Auto-generated method stub
+		if (tokenActual.getCategoria() == Categoria.PUNTO) {
+			Token inv = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token id = tokenActual;
+				obtenerSiguienteToken();
+
+				if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+					Token parIzq = tokenActual;
+					obtenerSiguienteToken();
+
+					ArrayList<Parametro> parametros = esListaDeParametro();
+
+					
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+						Token parDer = tokenActual;
+						obtenerSiguienteToken();
+						
+						if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+							Token finSentencia = tokenActual;
+							obtenerSiguienteToken();
+							return new InvocacionFuncion(inv, id, parIzq, parametros, parDer, finSentencia);
+						} else {
+							reportarError("Falta el finsentencia en la funcion");
+						}
+					} else {
+						reportarError("Falta parentisis derecho en la funcion");
+					}
+				} else {
+					reportarError("Falta parentisis izquierdo en la funcion");
+				}
+			} else {
+				reportarError("Falta el identificador de la funcion a invocar");
+			}
+		}
 		return null;
 	}
 
@@ -268,6 +302,58 @@ public class AnalizadorSintactico {
 	}
 
 	private Condicion esCondicion() {
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("si")) {
+			Token palabraReservada = tokenActual;
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+				Token parIzq = tokenActual;
+				obtenerSiguienteToken();
+
+				ExpresionLogica expLog = esExpresionLogica();
+
+				if (expLog != null) {
+					obtenerSiguienteToken();
+
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+						Token parDer = tokenActual;
+						obtenerSiguienteToken();
+
+						if (tokenActual.getCategoria() == Categoria.LLAVE_IZQ) {
+							Token llaveIzq = tokenActual;
+							obtenerSiguienteToken();
+
+							ArrayList<Sentencia> sentencias = esListaSentencias();
+
+							if (tokenActual.getCategoria() == Categoria.LLAVE_DER) {
+								Token llaveDer = tokenActual;
+								obtenerSiguienteToken();
+								Condicion c = new Condicion(palabraReservada, parIzq, expLog, parDer, llaveIzq,
+										sentencias, llaveDer);
+								return c;
+
+							} else {
+								reportarError("Falta llave derecha en la condicion");
+							}
+						} else {
+							reportarError("Falta llave izquierda en la condicion");
+						}
+					} else {
+						reportarError("Falta parentesis derecho en la condicion");
+					}
+				} else {
+					reportarError("Falta expresion logica en la condicion");
+				}
+			} else {
+				reportarError("Falta parentesis izquierdo en la condicion");
+			}
+		}
+
+		return null;
+	}
+
+	private ExpresionLogica esExpresionLogica() {
 		// TODO Auto-generated method stub
 		return null;
 	}
