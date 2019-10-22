@@ -251,11 +251,10 @@ public class AnalizadorSintactico {
 
 					ArrayList<Parametro> parametros = esListaDeParametro();
 
-					
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
 						Token parDer = tokenActual;
 						obtenerSiguienteToken();
-						
+
 						if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
 							Token finSentencia = tokenActual;
 							obtenerSiguienteToken();
@@ -277,12 +276,87 @@ public class AnalizadorSintactico {
 	}
 
 	private Leer esLectura() {
-		// TODO Auto-generated method stub
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("leer")) {
+			Token palabraReservada = tokenActual;
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token id = tokenActual;
+				obtenerSiguienteToken();
+
+				if (estipoDato()) {
+					Token tipoDato = tokenActual;
+					obtenerSiguienteToken();
+
+					if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+						Token finSentencia = tokenActual;
+						obtenerSiguienteToken();
+						return new Leer(palabraReservada, id, tipoDato, finSentencia);
+					} else {
+						reportarError("Falta el final de sentencia en el leer");
+					}
+				} else {
+					reportarError("Falta el tipo de dato de leer");
+				}
+			} else {
+				reportarError("Falta el identificador de leer");
+			}
+
+		}
+
 		return null;
 	}
 
 	private Ciclo esCiclo() {
-		// TODO Auto-generated method stub
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("mientras")) {
+			Token palabraReservada = tokenActual;
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+				Token parIzq = tokenActual;
+				obtenerSiguienteToken();
+
+				ExpresionLogica expLog = esExpresionLogica();
+
+				if (expLog != null) {
+					obtenerSiguienteToken();
+
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+						Token parDer = tokenActual;
+						obtenerSiguienteToken();
+
+						if (tokenActual.getCategoria() == Categoria.LLAVE_IZQ) {
+							Token llaveIzq = tokenActual;
+							obtenerSiguienteToken();
+
+							ArrayList<Sentencia> sentencias = esListaSentencias();
+
+							if (tokenActual.getCategoria() == Categoria.LLAVE_DER) {
+								Token llaveDer = tokenActual;
+								obtenerSiguienteToken();
+								return new Ciclo(palabraReservada, parIzq, expLog, parDer, llaveIzq, sentencias,
+										llaveDer);
+							} else {
+								reportarError("Falta llave derecha en el ciclo");
+							}
+
+						} else {
+							reportarError("Falta llave izquierda en en el ciclo");
+						}
+					} else {
+						reportarError("Falta parentesis derecho en el ciclo");
+					}
+				} else {
+					reportarError("Falta expresion logica en ciclo");
+				}
+			} else {
+				reportarError("Falta parentesis izquierdo en el ciclo");
+			}
+
+		}
+
 		return null;
 	}
 

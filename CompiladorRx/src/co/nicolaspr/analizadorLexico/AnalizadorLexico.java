@@ -861,6 +861,8 @@ public class AnalizadorLexico {
 		palabrasReservadas.add("por");// for
 		palabrasReservadas.add("mientras");// while
 		palabrasReservadas.add("romper");// break
+		palabrasReservadas.add("leer");// lectura
+		palabrasReservadas.add("imprimir");// impresion
 
 	}
 
