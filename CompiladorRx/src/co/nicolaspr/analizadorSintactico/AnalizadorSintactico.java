@@ -2,6 +2,7 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
+
 import co.nicolaspr.analizadorLexico.Categoria;
 import co.nicolaspr.analizadorLexico.Token;
 
@@ -361,11 +362,108 @@ public class AnalizadorSintactico {
 	}
 
 	private DeclaracionDeVariable esDeclaracionDeVariable() {
+		if (estipoDato()) {
+			Token tipoDato = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token identificador = tokenActual;
+				obtenerSiguienteToken();
+				if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+					Token finSentencia = tokenActual;
+					obtenerSiguienteToken();
+					return new DeclaracionDeVariable(tipoDato, identificador, finSentencia);
+				} else {
+					reportarError("Falta el fin de sentencia en la declaracion de variable");
+				}
+
+			} else {
+				reportarError("Falta el identificador de la declaracion de variable");
+			}
+		}
+		return null;
+
+	}
+
+	private Impresion esImpresion() {
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("imprimir")) {
+			Token palabraReservada = tokenActual;
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+				Token parIzq = tokenActual;
+				obtenerSiguienteToken();
+
+				Expresion exp = esExpresion();
+
+				if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+					Token parDer = tokenActual;
+					obtenerSiguienteToken();
+
+					if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+						Token finSentencia = tokenActual;
+						obtenerSiguienteToken();
+						return new Impresion(palabraReservada, parIzq, exp, parDer, finSentencia);
+					} else {
+
+						reportarError("Falta el final de sentencia en la impresion");
+					}
+
+				} else {
+					reportarError("Falta parentesis derecho en la impresion");
+				}
+
+			} else {
+
+				reportarError("Falta parentesis izquierdo en la impresion");
+			}
+
+		}
+
+		return null;
+
+	}
+
+	private Expresion esExpresion() {
+		ExpresionCadena expresionCadena = esExpresionCadena();
+		if (expresionCadena != null) {
+			Expresion e = new Expresion(expresionCadena);
+			return e;
+		}
+
+		ExpresionAritmetica expAritmetica = esExpresionAritmetica();
+		if (expAritmetica != null) {
+			Expresion e = new Expresion(expAritmetica);
+			return e;
+		}
+
+		ExpresionRelacional expresionRelacional = esExpresionRelacional();
+		if (expresionRelacional != null) {
+			Expresion e = new Expresion(expresionRelacional);
+			return e;
+		}
+
+		ExpresionLogica expresionLogica = esExpresionLogica();
+		if (expresionLogica != null) {
+			Expresion e = new Expresion(expresionLogica);
+			return e;
+		}
+
+		return null;
+
+	}
+
+	private co.nicolaspr.analizadorSintactico.ExpresionCadena esExpresionCadena() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private Impresion esImpresion() {
+	private ExpresionRelacional esExpresionRelacional() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private co.nicolaspr.analizadorSintactico.ExpresionAritmetica esExpresionAritmetica() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -433,12 +531,48 @@ public class AnalizadorSintactico {
 	}
 
 	private AsignacionDeVariable esAsignacion() {
-		// TODO Auto-generated method stub
+
+		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+			Token id = tokenActual;
+			obtenerSiguienteToken();
+			
+			if (tokenActual.getCategoria()==Categoria.OPERADOR_ASIGNACION) {
+				Token opAsignacion = tokenActual;
+				obtenerSiguienteToken();
+				Termino t = esTermino();
+				if (t != null) {
+					obtenerSiguienteToken();
+					
+					if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+						Token finSentencia = tokenActual;
+						obtenerSiguienteToken();
+						return new AsignacionDeVariable(id, opAsignacion, t, finSentencia);
+					} else {
+						reportarError("Falta fin de sentencia en la asginacion");
+					}
+				} else {
+					reportarError("Falta el termino que se asigna en la asginacion");
+				}
+			} else {
+				reportarError("Falta operador de asignacion en la asginacion");
+			}
+		}
+
+		return null;
+	}
+
+	private Termino esTermino() {
+		if (tokenActual.getCategoria() == Categoria.ENTERO
+				|| tokenActual.getCategoria() == Categoria.IDENTIFICADOR
+				|| tokenActual.getCategoria() == Categoria.CADENA_CARACTERES) {
+			return new Termino(tokenActual);
+		}
+
 		return null;
 	}
 
 	/**
-	 * Metopdo que me ayuda a recorrer el codigo fuente de una forma ordenada
+	 * Metodo que me ayuda a recorrer el codigo fuente de una forma ordenada
 	 */
 	public void obtenerSiguienteToken() {
 
