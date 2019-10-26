@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
@@ -25,10 +26,12 @@ import co.nicolaspr.analizadorLexico.AnalizadorLexico;
 import co.nicolaspr.analizadorLexico.ErrorLexico;
 import co.nicolaspr.analizadorLexico.Token;
 import co.nicolaspr.analizadorSintactico.AnalizadorSintactico;
+
 /**
  * Clase de la interfaz principal del programa
+ * 
  * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
- *@version 1.0.0
+ * @version 1.0.0
  */
 public class Interfaz extends JFrame implements ActionListener {
 
@@ -36,13 +39,14 @@ public class Interfaz extends JFrame implements ActionListener {
 	private JButton btnAnalizar, btnLimpiar;
 	private AnalizadorLexico analizador;
 	private JTable tablaSimbolos, tablaDesconocidos, tablaErrores;
-	private JScrollPane scrollTSimbolos, scrollTDesconocidos, scrollTErrores, scrollSintactico;
+	private JScrollPane scrollTSimbolos, scrollTDesconocidos, scrollTErrores, scrollSintactico, scrollPestanias;
 	private DefaultTableModel modelo, modeloDesconocido, modeloError;
 	private ArrayList<Token> lista;
 	private ArrayList<ErrorLexico> listaError;
 	private JPanel contentPane;
 	private JTree arbolVisual;
 	private AnalizadorSintactico analizadorSintactico;
+	private JTabbedPane pestanias;
 
 	/**
 	 * Costructor de la clase, se inicializan todos los componentes
@@ -50,7 +54,7 @@ public class Interfaz extends JFrame implements ActionListener {
 	public Interfaz() {
 
 		setLayout(null);
-		setSize(1100, 500);
+		setSize(800, 650);
 		setLocationRelativeTo(null);
 		setTitle("Analizador Lexico");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -61,7 +65,7 @@ public class Interfaz extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 
 		jArea = new JTextArea();
-		jArea.setBounds(20, 60, 300, 300);
+		jArea.setBounds(20, 90, 300, 300);
 		contentPane.add(jArea);
 
 		modelo = new DefaultTableModel();
@@ -89,7 +93,6 @@ public class Interfaz extends JFrame implements ActionListener {
 		lblValidos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblValidos.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblValidos.setBounds(277, 15, 524, 32);
-		contentPane.add(lblValidos);
 
 		/**
 		 * Componentes tabla de simbolos
@@ -107,7 +110,6 @@ public class Interfaz extends JFrame implements ActionListener {
 		lblDesconocidos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDesconocidos.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDesconocidos.setBounds(277, 160, 524, 32);
-		contentPane.add(lblDesconocidos);
 
 		/**
 		 * componentes tabla de desconocidos
@@ -125,7 +127,6 @@ public class Interfaz extends JFrame implements ActionListener {
 		lblErrores.setHorizontalAlignment(SwingConstants.CENTER);
 		lblErrores.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblErrores.setBounds(277, 305, 524, 32);
-		contentPane.add(lblErrores);
 
 		/**
 		 * componentes tabla de errores
@@ -138,27 +139,42 @@ public class Interfaz extends JFrame implements ActionListener {
 		scrollTErrores.setBounds(350, 345, 400, 100);
 		scrollTErrores.setVisible(true);
 		contentPane.add(scrollTErrores);
-		
+
+		/**
+		 * Pestañas
+		 */
+
+		pestanias = new JTabbedPane();
+
+		pestanias.add("TABLA DE SIMBOLOS VALIDOS", scrollTSimbolos);
+		pestanias.add("TABLA DE SIMBOLOS DESCONOCIDOS", scrollTDesconocidos);
+		pestanias.add("TABLA DE ERRORES", scrollTErrores);
+
+		scrollPestanias = new JScrollPane(pestanias);
+		scrollPestanias.setBounds(20, 420, 600, 150);
+		scrollPestanias.setVisible(true);
+		contentPane.add(scrollPestanias);
+
 		arbolVisual = new JTree(new DefaultTreeModel(new DefaultMutableTreeNode("Unidad de Compilacion")));
 		scrollSintactico = new JScrollPane(arbolVisual);
-		scrollSintactico.setBounds(760, 60, 300, 380);
+		scrollSintactico.setBounds(400, 20, 300, 380);
 		contentPane.add(scrollSintactico);
 
 		btnAnalizar = new JButton("Analizar");
-		btnAnalizar.setBounds(60, 380, 100, 30);
+		btnAnalizar.setBounds(60, 30, 100, 30);
 		btnAnalizar.addActionListener(this);
 		contentPane.add(btnAnalizar);
-		
+
 		btnLimpiar = new JButton("Limpiar");
-		btnLimpiar.setBounds(190, 380, 100, 30);
+		btnLimpiar.setBounds(190, 30, 100, 30);
 		btnLimpiar.addActionListener(this);
 		contentPane.add(btnLimpiar);
 
-
 	}
-/**
- * Metodo donde se le dan las acciones a los botones de la interfaz
- */
+
+	/**
+	 * Metodo donde se le dan las acciones a los botones de la interfaz
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -181,17 +197,18 @@ public class Interfaz extends JFrame implements ActionListener {
 			analizadorSintactico.analizar();
 			DefaultMutableTreeNode tree = analizadorSintactico.getUnidadDeCompilacion().getArbolVisual();
 			arbolVisual.setModel(new DefaultTreeModel(tree));
-			
+
 		}
 	}
-/**
- * Metodo donde se agrega la informacion a las tablas 
- */
+
+	/**
+	 * Metodo donde se agrega la informacion a las tablas
+	 */
 	private void agregarTokensATabla() {
 
 		Object[] fila = new Object[4];
 		Object[] fila1 = new Object[3];
-		
+
 		modelo.setRowCount(0);
 		modeloDesconocido.setRowCount(0);
 

@@ -2,7 +2,6 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
-
 import co.nicolaspr.analizadorLexico.Categoria;
 import co.nicolaspr.analizadorLexico.Token;
 
@@ -250,7 +249,7 @@ public class AnalizadorSintactico {
 					Token parIzq = tokenActual;
 					obtenerSiguienteToken();
 
-					ArrayList<Parametro> parametros = esListaDeParametro();
+					ArrayList<Argumento> parametros = esListaArgumentosRecursivo();
 
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
 						Token parDer = tokenActual;
@@ -273,6 +272,33 @@ public class AnalizadorSintactico {
 				reportarError("Falta el identificador de la funcion a invocar");
 			}
 		}
+		return null;
+	}
+
+	private ArrayList<Argumento> esListaArgumentosRecursivo() {
+		ArrayList<Argumento> a = null;
+		Expresion e = esExpresion();
+		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR && e.toString().length() < 3) {
+			a = new ArrayList<Argumento>();
+			a.add(new Argumento(tokenActual));
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
+				obtenerSiguienteToken();
+				a.addAll(esListaArgumentosRecursivo());
+			}
+			return a;
+		}
+		if (e != null) {
+			a = new ArrayList<Argumento>();
+			a.add(new Argumento(e));
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
+				obtenerSiguienteToken();
+				a.addAll(esListaArgumentosRecursivo());
+			}
+			return a;
+		}
+
 		return null;
 	}
 
@@ -453,7 +479,7 @@ public class AnalizadorSintactico {
 
 	}
 
-	private co.nicolaspr.analizadorSintactico.ExpresionCadena esExpresionCadena() {
+	private ExpresionCadena esExpresionCadena() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -463,13 +489,32 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
-	private co.nicolaspr.analizadorSintactico.ExpresionAritmetica esExpresionAritmetica() {
+	private ExpresionAritmetica esExpresionAritmetica() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private Retorno esRetorno() {
-		// TODO Auto-generated method stub
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("retornar")) {
+			Token palabraReservada = tokenActual;
+			obtenerSiguienteToken();
+			Expresion expresion = esExpresion();
+			if (expresion != null) {
+				obtenerSiguienteToken();
+
+				if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+					Token finSentencia = tokenActual;
+					obtenerSiguienteToken();
+					return new Retorno(palabraReservada, expresion, finSentencia);
+				} else {
+					reportarError("Falta el final de sentencia en el retorno");
+				}
+			} else {
+				reportarError("Falta la expresion en el retorno");
+			}
+		}
+
 		return null;
 	}
 
@@ -535,14 +580,14 @@ public class AnalizadorSintactico {
 		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
 			Token id = tokenActual;
 			obtenerSiguienteToken();
-			
-			if (tokenActual.getCategoria()==Categoria.OPERADOR_ASIGNACION) {
+
+			if (tokenActual.getCategoria() == Categoria.OPERADOR_ASIGNACION) {
 				Token opAsignacion = tokenActual;
 				obtenerSiguienteToken();
 				Termino t = esTermino();
 				if (t != null) {
 					obtenerSiguienteToken();
-					
+
 					if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
 						Token finSentencia = tokenActual;
 						obtenerSiguienteToken();
@@ -562,8 +607,7 @@ public class AnalizadorSintactico {
 	}
 
 	private Termino esTermino() {
-		if (tokenActual.getCategoria() == Categoria.ENTERO
-				|| tokenActual.getCategoria() == Categoria.IDENTIFICADOR
+		if (tokenActual.getCategoria() == Categoria.ENTERO || tokenActual.getCategoria() == Categoria.IDENTIFICADOR
 				|| tokenActual.getCategoria() == Categoria.CADENA_CARACTERES) {
 			return new Termino(tokenActual);
 		}
