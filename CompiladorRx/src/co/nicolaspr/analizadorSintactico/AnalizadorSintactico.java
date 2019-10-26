@@ -480,7 +480,24 @@ public class AnalizadorSintactico {
 	}
 
 	private ExpresionCadena esExpresionCadena() {
-		// TODO Auto-generated method stub
+		
+		if (tokenActual.getCategoria() == Categoria.CADENA_CARACTERES) {
+			Token cadena = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria()!=Categoria.OPERADOR_ARITMETICO&&!tokenActual.getLexema().equals("+")) {
+				return new ExpresionCadena(cadena);
+			} else {
+				Token mas = tokenActual;
+				obtenerSiguienteToken();
+				Expresion ex = esExpresion();
+				if (ex != null) {
+					return new ExpresionCadena(cadena, mas, ex);
+				} else {
+					reportarError("Falta la expresion");
+				}
+			}
+		}
+
 		return null;
 	}
 
