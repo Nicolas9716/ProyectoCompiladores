@@ -2,9 +2,11 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
-public class Ciclo {
+public class Ciclo extends Sentencia{
 	private Token palabraReservada, parIzq;
 	private ExpresionLogica expresionLogica;
 	private Token parDer, llaveIzq;
@@ -28,6 +30,28 @@ public class Ciclo {
 		return "Ciclo [palabraReservada=" + palabraReservada + ", parIzq=" + parIzq + ", expresionLogica="
 				+ expresionLogica + ", parDer=" + parDer + ", llaveIzq=" + llaveIzq + ", sentencias=" + sentencias
 				+ ", llaveDer=" + llaveDer + "]";
+	}
+	
+	public DefaultMutableTreeNode getArbolVisual() {
+		
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("ciclo");
+		
+		DefaultMutableTreeNode condicion = new DefaultMutableTreeNode("condicion");
+		
+		condicion.add(expresionLogica.getArbolVisual());
+		nodo.add(condicion);
+		
+		if(sentencias != null) {
+			DefaultMutableTreeNode sentenci = new DefaultMutableTreeNode("sentencias");
+			for (Sentencia sentencia : sentencias) {
+				sentenci.add(sentencia.getArbolVisual());
+			}
+			nodo.add(sentenci);
+		}else {
+			nodo.add(new DefaultMutableTreeNode("Sentencias: Sin sentencias"));
+		}
+		return nodo;
+		
 	}
 
 }

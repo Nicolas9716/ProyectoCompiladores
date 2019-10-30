@@ -1,8 +1,10 @@
 package co.nicolaspr.analizadorSintactico;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
-public class Impresion {
+public class Impresion extends Sentencia {
 	private Token palabrareser,parIzq;
 	private Expresion expresion;
 	private Token parDer,finSentencia;
@@ -18,6 +20,11 @@ public class Impresion {
 	public String toString() {
 		return "Impresion [palabrareser=" + palabrareser + ", parIzq=" + parIzq + ", expresion=" + expresion
 				+ ", parDer=" + parDer + ", finSentencia=" + finSentencia + "]";
+	}
+	@Override
+	public DefaultMutableTreeNode getArbolVisual() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

@@ -2,9 +2,11 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
-public class Condicion {
+public class Condicion extends Sentencia {
 	private Token palabraReservada,parIzq;
 	private ExpresionLogica expresionLogica;
 	private Token parDer,llaIzq;
@@ -27,6 +29,13 @@ public class Condicion {
 				+ expresionLogica + ", parDer=" + parDer + ", llaIzq=" + llaIzq + ", sentencias=" + sentencias
 				+ ", llaDer=" + llaDer + "]";
 	}
+	@Override
+	public DefaultMutableTreeNode getArbolVisual() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 	
 
 }

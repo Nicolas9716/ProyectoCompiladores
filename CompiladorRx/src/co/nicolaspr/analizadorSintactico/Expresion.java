@@ -1,5 +1,7 @@
 package co.nicolaspr.analizadorSintactico;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 public class Expresion {
 	private ExpresionAritmetica expresionAritmetica;
 	private ExpresionRelacional expresionRelacional;
@@ -24,6 +26,10 @@ public class Expresion {
 	public Expresion(ExpresionCadena expresionCadena) {
 		super();
 		this.expresionCadena = expresionCadena;
+	}
+	
+	public DefaultMutableTreeNode getArbolVisual() {
+		return null;
 	}
 
 }

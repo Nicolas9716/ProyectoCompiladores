@@ -12,9 +12,9 @@ public class Parametro {
 
 	private Token nombre, tipoDato;
 
-	public Parametro(Token nombre, Token tipoDato) {
+	public Parametro(Token tipoDato,Token nombre) {
 		super();
-		nombre = nombre;
+		this.nombre = nombre;
 		this.tipoDato = tipoDato;
 	}
 

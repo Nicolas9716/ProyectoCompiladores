@@ -1,8 +1,10 @@
 package co.nicolaspr.analizadorSintactico;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
-public class Leer {
+public class Leer extends Sentencia{
 	private Token palabraReservada;
 	private Token id;
 	private Token tipoDato;
@@ -18,6 +20,11 @@ public class Leer {
 	public String toString() {
 		return "Leer [palabraReservada=" + palabraReservada + ", id=" + id + ", tipoDato=" + tipoDato
 				+ ", finSentencia=" + finSentencia + "]";
+	}
+	@Override
+	public DefaultMutableTreeNode getArbolVisual() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

@@ -1,8 +1,10 @@
 package co.nicolaspr.analizadorSintactico;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
-public class AsignacionDeVariable {
+public class AsignacionDeVariable extends Sentencia{
 	private Token identificador, opAsignacion;
 	private Termino termino;
 	private Token finSentencia;
@@ -17,6 +19,11 @@ public class AsignacionDeVariable {
 	public String toString() {
 		return "AsignacionDeVariable [identificador=" + identificador + ", opAsignacion=" + opAsignacion + ", termino="
 				+ termino + ", finSentencia=" + finSentencia + "]";
+	}
+	@Override
+	public DefaultMutableTreeNode getArbolVisual() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

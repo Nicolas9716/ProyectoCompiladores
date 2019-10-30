@@ -2,12 +2,15 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
-public class InvocacionFuncion {
-	private Token punto,identifi,parIzq;
+public class InvocacionFuncion extends Sentencia{
+	private Token punto, identifi, parIzq;
 	private ArrayList<Argumento> argumentos;
-	private Token parDer,finSentencia;
+	private Token parDer, finSentencia;
+
 	public InvocacionFuncion(Token punto, Token identifi, Token parIzq, ArrayList<Argumento> argumentos, Token parDer,
 			Token finSentencia) {
 		super();
@@ -18,13 +21,30 @@ public class InvocacionFuncion {
 		this.parDer = parDer;
 		this.finSentencia = finSentencia;
 	}
+
 	@Override
 	public String toString() {
 		return "InvocacionFuncion [punto=" + punto + ", identifi=" + identifi + ", parIzq=" + parIzq + ", argumentos="
 				+ argumentos + ", parDer=" + parDer + ", finSentencia=" + finSentencia + "]";
 	}
 
-	
-	
+	public DefaultMutableTreeNode getArbolVisual() {
+
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Invocación");
+		nodo.add(new DefaultMutableTreeNode("Nombre función: " + identifi.getLexema()));
+
+		if (argumentos != null) {
+			DefaultMutableTreeNode argu = new DefaultMutableTreeNode("Argumentos");
+
+			for (Argumento argumento : argumentos) {
+				argu.add(argumento.getArbolVisual());
+			}
+			nodo.add(argu);
+		} else {
+			nodo.add(new DefaultMutableTreeNode("Argumentos: Sin argumentos "));
+		}
+
+		return nodo;
+	}
 
 }

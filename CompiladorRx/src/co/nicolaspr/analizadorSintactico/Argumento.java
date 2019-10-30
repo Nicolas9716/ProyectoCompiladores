@@ -1,6 +1,8 @@
 package co.nicolaspr.analizadorSintactico;
 
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
 public class Argumento {
@@ -28,6 +30,7 @@ public class Argumento {
 		this.exp = exp;
 	}
 
+	
 	/**
 	 * Metodo constructor de la clase, cuando el argumento tiene id separador y mas
 	 * argumentos
@@ -53,6 +56,16 @@ public class Argumento {
 		this.argumentos = argumentos;
 	}
 	
-	
+	/**
+	 * Devuelve el arbol visual de la clase Argumento
+	 * @return
+	 */
+	public DefaultMutableTreeNode getArbolVisual() {
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Argumento");
+		
+		nodo.add(identificador.getArbolVisual());
+
+		return nodo;
+	}
 
 }

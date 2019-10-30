@@ -1,6 +1,11 @@
 package co.nicolaspr.analizadorLexico;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+
 /**
- * clase token, que me define un token en si, constando de su lexema,categoria, y fila y columna donde se encontro
+ * clase token, que me define un token en si, constando de su lexema,categoria,
+ * y fila y columna donde se encontro
+ * 
  * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
  *
  */
@@ -51,5 +56,9 @@ public class Token {
 	@Override
 	public String toString() {
 		return "Token [lexema=" + lexema + ", fila=" + fila + ", columna=" + columna + ", categoria=" + categoria + "]";
+	}
+
+	public DefaultMutableTreeNode getArbolVisual() {
+		return null;
 	}
 }

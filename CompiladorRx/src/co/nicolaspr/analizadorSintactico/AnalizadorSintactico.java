@@ -150,7 +150,7 @@ public class AnalizadorSintactico {
 	}
 
 	/*
-	 * <esListaDeParametro>::= <parametro>[<esListaDeParametro>]
+	 * <esListaDeParametro>::= <parametro>[","<esListaDeParametro>]
 	 * 
 	 */
 	public ArrayList<Parametro> esListaDeParametro() {
@@ -160,7 +160,13 @@ public class AnalizadorSintactico {
 
 		while (p != null) {
 			parametros.add(p);
-			p = esParametro();
+
+			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
+				obtenerSiguienteToken();
+				p = esParametro();
+			} else {
+				p = null;
+			}
 		}
 
 		return parametros;
@@ -196,42 +202,43 @@ public class AnalizadorSintactico {
 	private Sentencia esSentencia() {
 		Condicion c = esCondicion();
 		if (c != null) {
-			return new Sentencia(c);
+			return  c;
 		}
+	
 
 		DeclaracionDeVariable d = esDeclaracionDeVariable();
 		if (d != null) {
-			return new Sentencia(d);
+			return d;
 		}
 
 		AsignacionDeVariable a = esAsignacion();
 		if (a != null) {
-			return new Sentencia(a);
+			return a;
 		}
 
 		Impresion b = esImpresion();
 		if (b != null) {
-			return new Sentencia(b);
+			return b;
 		}
 
 		Retorno e = esRetorno();
 		if (e != null) {
-			return new Sentencia(e);
+			return e;
 		}
 
 		Leer f = esLectura();
 		if (f != null) {
-			return new Sentencia(f);
+			return f;
 		}
 
 		Ciclo ciclo = esCiclo();
 		if (ciclo != null) {
-			return new Sentencia(ciclo);
+			return ciclo;
 		}
 
 		InvocacionFuncion i = esInvocacion();
 		if (i != null) {
-			return new Sentencia(i);
+			return i;
 		}
 
 		return null;
@@ -480,11 +487,11 @@ public class AnalizadorSintactico {
 	}
 
 	private ExpresionCadena esExpresionCadena() {
-		
+
 		if (tokenActual.getCategoria() == Categoria.CADENA_CARACTERES) {
 			Token cadena = tokenActual;
 			obtenerSiguienteToken();
-			if (tokenActual.getCategoria()!=Categoria.OPERADOR_ARITMETICO&&!tokenActual.getLexema().equals("+")) {
+			if (tokenActual.getCategoria() != Categoria.OPERADOR_ARITMETICO && !tokenActual.getLexema().equals("+")) {
 				return new ExpresionCadena(cadena);
 			} else {
 				Token mas = tokenActual;
@@ -502,12 +509,160 @@ public class AnalizadorSintactico {
 	}
 
 	private ExpresionRelacional esExpresionRelacional() {
-		// TODO Auto-generated method stub
+
+		if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+			obtenerSiguienteToken();
+
+			Token operador = null;
+
+			ExpresionAritmetica ea = esExpresionAritmetica();
+
+			if (ea != null) {
+				if (tokenActual.getCategoria() == Categoria.OPERADOR_RELACIONAL) {
+
+					operador = tokenActual;
+
+					obtenerSiguienteToken();
+					ExpresionAritmetica ea1 = esExpresionAritmetica();
+					if (ea1 != null) {
+
+						if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+
+							obtenerSiguienteToken();
+
+							return new ExpresionRelacional(ea, operador, ea1);
+						} else {
+							reportarError("falta parentesis derecho");
+						}
+
+					} else {
+						reportarError("falta la expresion aritmetica");
+					}
+
+				} else {
+					reportarError("Falta operador relacional");
+				}
+			} else {
+
+				if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("true")
+						|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+								&& tokenActual.getLexema().equals("false")) {
+
+					return new ExpresionRelacional(tokenActual);
+
+				}
+
+			}
+
+		} else {
+			Token operador = null;
+
+			ExpresionAritmetica ea = esExpresionAritmetica();
+
+			if (ea != null) {
+				if (tokenActual.getCategoria() == Categoria.OPERADOR_RELACIONAL) {
+
+					operador = tokenActual;
+
+					obtenerSiguienteToken();
+					ExpresionAritmetica ea1 = esExpresionAritmetica();
+					if (ea1 != null) {
+						return new ExpresionRelacional(ea, operador, ea1);
+					} else {
+						reportarError("falta la expresion aritmetica");
+					}
+
+				} else {
+					reportarError("Falta operador relacional");
+				}
+			} else {
+
+				if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("true")
+						|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+								&& tokenActual.getLexema().equals("false")) {
+
+					return new ExpresionRelacional(tokenActual);
+
+				}
+
+			}
+		}
+
 		return null;
 	}
 
 	private ExpresionAritmetica esExpresionAritmetica() {
-		// TODO Auto-generated method stub
+
+		if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+			obtenerSiguienteToken();
+			ExpresionAritmetica eA = esExpresionAritmetica();
+
+			if (eA != null) {
+				if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+					obtenerSiguienteToken();
+					ExpresionAritmeticaAuxiliar eAux = esExpresionAritmeticaAuxiliar();
+					return new ExpresionAritmetica(eA, eAux);
+				}
+			}
+		}
+
+		ValorNumerico vl = esValorNumerico();
+		if (vl != null) {
+			obtenerSiguienteToken();
+			ExpresionAritmeticaAuxiliar eAux = esExpresionAritmeticaAuxiliar();
+			return new ExpresionAritmetica(vl, eAux);
+		}
+
+		return null;
+	}
+
+	private ValorNumerico esValorNumerico() {
+
+		Token Signo = null;
+
+		if (tokenActual.getLexema().equals("+") || tokenActual.getLexema().equals("-")) {
+
+			Signo = tokenActual;
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.ENTERO || tokenActual.getCategoria() == Categoria.REAL) {
+				Token Valor = tokenActual;
+				return new ValorNumerico(Signo, Valor);
+			} else {
+				reportarError("falta el valor numerico");
+			}
+
+		} else {
+
+			if (tokenActual.getCategoria() == Categoria.ENTERO || tokenActual.getCategoria() == Categoria.REAL) {
+				Token Valor = tokenActual;
+				return new ValorNumerico(Signo, Valor);
+			} else {
+				if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+					Token Valor = tokenActual;
+					return new ValorNumerico(Signo, Valor);
+				}
+			}
+		}
+		return null;
+
+	}
+
+	private ExpresionAritmeticaAuxiliar esExpresionAritmeticaAuxiliar() {
+
+		if (tokenActual.getCategoria() == Categoria.OPERADOR_ARITMETICO) {
+			Token operador = tokenActual;
+			obtenerSiguienteToken();
+			ExpresionAritmetica eA = esExpresionAritmetica();
+			if (eA != null) {
+				ExpresionAritmeticaAuxiliar eAux = esExpresionAritmeticaAuxiliar();
+				return new ExpresionAritmeticaAuxiliar(operador, eA, eAux);
+			} else {
+				reportarError("Falta un termino de la expresion aritmetica");
+
+			}
+		}
+
 		return null;
 	}
 
@@ -588,7 +743,49 @@ public class AnalizadorSintactico {
 	}
 
 	private ExpresionLogica esExpresionLogica() {
-		// TODO Auto-generated method stub
+
+		if (tokenActual.getCategoria() == Categoria.OPERADOR_LOGICO && tokenActual.getLexema().equals("!")) {
+
+			Token operador = tokenActual;
+			obtenerSiguienteToken();
+
+			ExpresionRelacional er = esExpresionRelacional();
+
+			if (er != null) {
+
+				return new ExpresionLogica(operador, er);
+
+			} else {
+				reportarError("falta expresion relacional");
+			}
+		} else {
+
+			ExpresionRelacional er = esExpresionRelacional();
+
+			if (er != null) {
+
+				if (tokenActual.getCategoria() == Categoria.OPERADOR_LOGICO && !tokenActual.getLexema().equals("!")) {
+
+					Token operador = tokenActual;
+
+					obtenerSiguienteToken();
+
+					ExpresionRelacional er1 = esExpresionRelacional();
+
+					if (er1 != null) {
+
+						return new ExpresionLogica(er, er1, operador);
+
+					} else {
+						reportarError("falta la expresion relacional");
+					}
+
+				} else {
+					reportarError("falta el operador logico");
+				}
+			}
+		}
+
 		return null;
 	}
 

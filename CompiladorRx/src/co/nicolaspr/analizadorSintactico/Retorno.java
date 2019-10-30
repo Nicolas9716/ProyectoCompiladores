@@ -1,8 +1,10 @@
 package co.nicolaspr.analizadorSintactico;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
-public class Retorno {
+public class Retorno extends Sentencia{
 	private Token palabraReservada;
 	private Expresion expresion;
 	private Token finSentencia;
@@ -16,6 +18,11 @@ public class Retorno {
 	public String toString() {
 		return "Retorno [palabraReservada=" + palabraReservada + ", expresion=" + expresion + ", finSentencia="
 				+ finSentencia + "]";
+	}
+	@Override
+	public DefaultMutableTreeNode getArbolVisual() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
