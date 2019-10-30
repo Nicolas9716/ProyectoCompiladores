@@ -45,6 +45,10 @@ public class Funcion {
 		DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Funcion");
 		raiz.add(new DefaultMutableTreeNode(identificador.getLexema()));
 
+		if(tipoRetorno!=null) {
+			raiz.add( new DefaultMutableTreeNode("Tipo de retorno: "+tipoRetorno.getLexema()) );	
+		}
+		
 		if (parametros != null) {
 			DefaultMutableTreeNode parametrosNodo = new DefaultMutableTreeNode("Parametros");
 			for (Parametro p : parametros) {

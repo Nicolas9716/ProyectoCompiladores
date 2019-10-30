@@ -26,6 +26,7 @@ import co.nicolaspr.analizadorLexico.AnalizadorLexico;
 import co.nicolaspr.analizadorLexico.ErrorLexico;
 import co.nicolaspr.analizadorLexico.Token;
 import co.nicolaspr.analizadorSintactico.AnalizadorSintactico;
+import co.nicolaspr.analizadorSintactico.UnidadDeCompilacion;
 
 /**
  * Clase de la interfaz principal del programa
@@ -155,9 +156,10 @@ public class Interfaz extends JFrame implements ActionListener {
 		scrollPestanias.setVisible(true);
 		contentPane.add(scrollPestanias);
 
-		arbolVisual = new JTree(new DefaultTreeModel(new DefaultMutableTreeNode("Unidad de Compilacion")));
+		arbolVisual = new JTree();
 		scrollSintactico = new JScrollPane(arbolVisual);
 		scrollSintactico.setBounds(400, 20, 300, 380);
+		
 		contentPane.add(scrollSintactico);
 
 		btnAnalizar = new JButton("Analizar");
@@ -190,13 +192,17 @@ public class Interfaz extends JFrame implements ActionListener {
 				analizador.analizar();
 				agregarTokensATabla();
 
+				analizadorSintactico = new AnalizadorSintactico(analizador.getTablaSimbolos());
+				analizadorSintactico.analizar();
+
+				arbolVisual.setModel(new DefaultTreeModel(analizadorSintactico.getUnidadDeCompilacion().getArbolVisual()));
+
 			} else {
 				JOptionPane.showMessageDialog(null, "Escriba algo");
 			}
-			analizadorSintactico = new AnalizadorSintactico(analizador.getTablaSimbolos());
-			analizadorSintactico.analizar();
-			DefaultMutableTreeNode tree = analizadorSintactico.getUnidadDeCompilacion().getArbolVisual();
-			arbolVisual.setModel(new DefaultTreeModel(tree));
+
+//			DefaultMutableTreeNode tree = analizadorSintactico.getUnidadDeCompilacion().getArbolVisual();
+//			arbolVisual.setModel(new DefaultTreeModel(tree));
 
 		}
 	}
@@ -243,4 +249,3 @@ public class Interfaz extends JFrame implements ActionListener {
 	}
 
 }
-

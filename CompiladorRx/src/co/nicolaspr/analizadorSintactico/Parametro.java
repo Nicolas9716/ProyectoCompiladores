@@ -24,8 +24,12 @@ public class Parametro {
 	}
 
 	public DefaultMutableTreeNode getArbolVisual() {
+		
+		 DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Parámetro");
 
-		return new DefaultMutableTreeNode("Nombre: " + nombre.getLexema());
+		 nodo.add(new DefaultMutableTreeNode("Nombre: " + nombre.getLexema()));
+		 
+		 return nodo;
 	}
 
 }
