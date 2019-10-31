@@ -6,7 +6,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
 
-public class InvocacionFuncion extends Sentencia{
+public class InvocacionFuncion extends Sentencia {
 	private Token punto, identifi, parIzq;
 	private ArrayList<Argumento> argumentos;
 	private Token parDer, finSentencia;
@@ -33,18 +33,34 @@ public class InvocacionFuncion extends Sentencia{
 		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Invocación");
 		nodo.add(new DefaultMutableTreeNode("Nombre función: " + identifi.getLexema()));
 
-		if (argumentos != null) {
+		if (argumentos == null) {
+			System.out.println("NO ARGU");
+			nodo.add(new DefaultMutableTreeNode("Argumentos: Sin argumentos "));
+		} else {
 			DefaultMutableTreeNode argu = new DefaultMutableTreeNode("Argumentos");
 
 			for (Argumento argumento : argumentos) {
 				argu.add(argumento.getArbolVisual());
 			}
 			nodo.add(argu);
-		} else {
-			nodo.add(new DefaultMutableTreeNode("Argumentos: Sin argumentos "));
+
 		}
 
 		return nodo;
+	}
+
+	/**
+	 * @return the argumentos
+	 */
+	public ArrayList<Argumento> getArgumentos() {
+		return argumentos;
+	}
+
+	/**
+	 * @param argumentos the argumentos to set
+	 */
+	public void setArgumentos(ArrayList<Argumento> argumentos) {
+		this.argumentos = argumentos;
 	}
 
 }

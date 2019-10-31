@@ -2,6 +2,8 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
+import com.sun.xml.internal.ws.api.addressing.WSEndpointReference.EPRExtension;
+
 import co.nicolaspr.analizadorLexico.Categoria;
 import co.nicolaspr.analizadorLexico.Token;
 
@@ -46,6 +48,18 @@ public class AnalizadorSintactico {
 
 		return null;
 
+	}
+
+	/**
+	 * Hacer backtracking, ya que no corresponde el término
+	 */
+	public void hacerBTToken(int posicionToken) {
+		posicionActual = posicionToken;
+		if (posicionToken < listaTokens.size()) {
+			tokenActual = listaTokens.get(posicionToken);
+		} else {
+			tokenActual = new Token("", Categoria.ERROR, 0, 0);
+		}
 	}
 
 	/**
@@ -255,7 +269,11 @@ public class AnalizadorSintactico {
 					Token parIzq = tokenActual;
 					obtenerSiguienteToken();
 
-					ArrayList<Argumento> parametros = esListaArgumentos();
+					ArrayList<Argumento> argumentos = null;
+
+					if (tokenActual.getCategoria() != Categoria.PARENTESIS_DER) {
+						argumentos = esListaArgumentos();
+					}
 
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
 						Token parDer = tokenActual;
@@ -264,7 +282,7 @@ public class AnalizadorSintactico {
 						if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
 							Token finSentencia = tokenActual;
 							obtenerSiguienteToken();
-							return new InvocacionFuncion(inv, id, parIzq, parametros, parDer, finSentencia);
+							return new InvocacionFuncion(inv, id, parIzq, argumentos, parDer, finSentencia);
 						} else {
 							reportarError("Falta el finsentencia en la funcion");
 						}
@@ -462,24 +480,41 @@ public class AnalizadorSintactico {
 	}
 
 	private Expresion esExpresion() {
-		ExpresionCadena expresionCadena = esExpresionCadena();
-		if (expresionCadena != null) {
-			return expresionCadena;
-		}
+		int posTokenAux = posicionActual;
 
 		ExpresionAritmetica expAritmetica = esExpresionAritmetica();
-		if (expAritmetica != null) {
-			return expAritmetica;
+
+		if (tokenActual.getCategoria() != Categoria.OPERADOR_RELACIONAL) {
+
+			if (expAritmetica != null) {
+
+				return expAritmetica;
+			}
+		} else {
+
+			hacerBTToken(posTokenAux);
 		}
 
-		ExpresionRelacional expresionRelacional = esExpresionRelacional();
-		if (expresionRelacional != null) {
-			return expresionRelacional;
+		ExpresionRelacional expRelacional = esExpresionRelacional();
+
+		if (tokenActual.getCategoria() != Categoria.OPERADOR_LOGICO) {
+
+			if (expRelacional != null) {
+				return expRelacional;
+			}
+		} else {
+
+			hacerBTToken(posTokenAux);
 		}
 
-		ExpresionLogica expresionLogica = esExpresionLogica();
-		if (expresionLogica != null) {
-			return expresionLogica;
+		ExpresionCadena expCadena = esExpresionCadena();
+		if (expCadena != null) {
+			return expCadena;
+		}
+
+		ExpresionLogica expLogica = esExpresionLogica();
+		if (expLogica != null) {
+			return expLogica;
 		}
 
 		return null;
@@ -562,7 +597,7 @@ public class AnalizadorSintactico {
 
 			if (ea != null) {
 				if (tokenActual.getCategoria() == Categoria.OPERADOR_RELACIONAL) {
-
+					System.out.println("LLEGUAAAAAAA");
 					operador = tokenActual;
 
 					obtenerSiguienteToken();
@@ -593,9 +628,36 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+//	private ExpresionRelacional esExpresionRelacional() {
+//		System.out.println("aaaaa");
+//		ExpresionAritmetica ea = esExpresionAritmetica();
+//
+//		if (ea != null) {
+//
+//			if (tokenActual.getCategoria() == Categoria.OPERADOR_RELACIONAL) {
+//				Token operador = tokenActual;
+//				obtenerSiguienteToken();
+//
+//				ExpresionAritmetica ea1 = esExpresionAritmetica();
+//				if (ea1 != null) {
+//					return new ExpresionRelacional(ea, operador, ea1);
+//				} else {
+//					reportarError("Falta expresion aritmetica");
+//				}
+//			} else {
+//				reportarError("falta operador relacional");
+//			}
+//
+//		}
+//
+//		return null;
+//
+//	}
+
 	private ExpresionAritmetica esExpresionAritmetica() {
 
 		if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+			System.out.println("11111");
 			obtenerSiguienteToken();
 			ExpresionAritmetica eA = esExpresionAritmetica();
 
@@ -610,6 +672,7 @@ public class AnalizadorSintactico {
 
 		ValorNumerico vl = esValorNumerico();
 		if (vl != null) {
+			System.out.println("qqqq");
 			obtenerSiguienteToken();
 			ExpresionAritmeticaAuxiliar eAux = esExpresionAritmeticaAuxiliar();
 			return new ExpresionAritmetica(vl, eAux);
