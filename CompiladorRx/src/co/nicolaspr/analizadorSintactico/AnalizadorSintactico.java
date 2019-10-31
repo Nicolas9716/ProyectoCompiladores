@@ -255,7 +255,7 @@ public class AnalizadorSintactico {
 					Token parIzq = tokenActual;
 					obtenerSiguienteToken();
 
-					ArrayList<Argumento> parametros = esListaArgumentosRecursivo();
+					ArrayList<Argumento> parametros = esListaArgumentos();
 
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
 						Token parDer = tokenActual;
@@ -281,28 +281,40 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
-	private ArrayList<Argumento> esListaArgumentosRecursivo() {
-		ArrayList<Argumento> a = null;
-		Expresion e = esExpresion();
-		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR && e.toString().length() < 3) {
-			a = new ArrayList<Argumento>();
-			a.add(new Argumento(tokenActual));
-			obtenerSiguienteToken();
+
+	/**
+	 * <ListaArgumentos> ::= <Argumento>[","<ListaArgumentos>]
+	 */
+	public ArrayList<Argumento> esListaArgumentos() {
+
+		ArrayList<Argumento> argumentos = new ArrayList<>();
+
+		Argumento a = esArgumento();
+
+		while (a != null) {
+			argumentos.add(a);
+
 			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
 				obtenerSiguienteToken();
-				a.addAll(esListaArgumentosRecursivo());
+				a = esArgumento();
+			} else {
+				a = null;
 			}
-			return a;
+
 		}
-		if (e != null) {
-			a = new ArrayList<Argumento>();
-			a.add(new Argumento(e));
-			obtenerSiguienteToken();
-			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
-				obtenerSiguienteToken();
-				a.addAll(esListaArgumentosRecursivo());
-			}
-			return a;
+
+		return argumentos;
+	}
+
+	/**
+	 * <Argumento> ::= <Expresion>
+	 */
+	public Argumento esArgumento() {
+		Expresion expresion = esExpresion();
+
+		if (expresion != null) {
+		
+			return new Argumento(expresion);
 		}
 
 		return null;
@@ -591,7 +603,7 @@ public class AnalizadorSintactico {
 				if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
 					obtenerSiguienteToken();
 					ExpresionAritmeticaAuxiliar eAux = esExpresionAritmeticaAuxiliar();
-					return new ExpresionAritmetica(eA, eAux);				
+					return new ExpresionAritmetica(eA, eAux);
 				}
 			}
 		}
@@ -657,15 +669,15 @@ public class AnalizadorSintactico {
 	}
 
 	private Retorno esRetorno() {
-		
+
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("retornar")) {
-			
+
 			Token palabraReservada = tokenActual;
 			obtenerSiguienteToken();
 			Expresion expresion = esExpresion();
 			if (expresion != null) {
 				if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
-					
+
 					Token finSentencia = tokenActual;
 					obtenerSiguienteToken();
 					return new Retorno(palabraReservada, expresion, finSentencia);

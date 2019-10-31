@@ -4,7 +4,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
 
-public class ExpresionRelacional extends Expresion  {
+public class ExpresionRelacional extends Expresion {
 
 	private ExpresionAritmetica termino1, termino2;
 	private Token operador, termino;
@@ -16,14 +16,14 @@ public class ExpresionRelacional extends Expresion  {
 		this.operador = operador;
 
 	}
-	
+
 	public ExpresionRelacional(Token termino) {
-		this.termino=termino;
+		this.termino = termino;
 	}
 
 	@Override
 	public String toString() {
-		return "ExpresionRelacional [termino1=" + termino1 + ", operador=" + operador + ", termino2=" + termino2 + "]" ;
+		return "ExpresionRelacional [termino1=" + termino1 + ", operador=" + operador + ", termino2=" + termino2 + "]";
 	}
 
 	/**
