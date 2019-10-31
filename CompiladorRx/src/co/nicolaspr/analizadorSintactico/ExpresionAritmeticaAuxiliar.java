@@ -2,7 +2,7 @@ package co.nicolaspr.analizadorSintactico;
 
 import co.nicolaspr.analizadorLexico.Token;
 
-public class ExpresionAritmeticaAuxiliar {
+public class ExpresionAritmeticaAuxiliar extends Expresion {
 
 	private Token operador;
 	private ExpresionAritmetica eA;

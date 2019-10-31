@@ -202,9 +202,8 @@ public class AnalizadorSintactico {
 	private Sentencia esSentencia() {
 		Condicion c = esCondicion();
 		if (c != null) {
-			return  c;
+			return c;
 		}
-	
 
 		DeclaracionDeVariable d = esDeclaracionDeVariable();
 		if (d != null) {
@@ -319,20 +318,14 @@ public class AnalizadorSintactico {
 				Token id = tokenActual;
 				obtenerSiguienteToken();
 
-				if (estipoDato()) {
-					Token tipoDato = tokenActual;
+				if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+					Token finSentencia = tokenActual;
 					obtenerSiguienteToken();
-
-					if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
-						Token finSentencia = tokenActual;
-						obtenerSiguienteToken();
-						return new Leer(palabraReservada, id, tipoDato, finSentencia);
-					} else {
-						reportarError("Falta el final de sentencia en el leer");
-					}
+					return new Leer(palabraReservada, id, finSentencia);
 				} else {
-					reportarError("Falta el tipo de dato de leer");
+					reportarError("Falta el final de sentencia en el leer");
 				}
+
 			} else {
 				reportarError("Falta el identificador de leer");
 			}
@@ -460,26 +453,22 @@ public class AnalizadorSintactico {
 	private Expresion esExpresion() {
 		ExpresionCadena expresionCadena = esExpresionCadena();
 		if (expresionCadena != null) {
-			Expresion e = new Expresion(expresionCadena);
-			return e;
+			return expresionCadena;
 		}
 
 		ExpresionAritmetica expAritmetica = esExpresionAritmetica();
 		if (expAritmetica != null) {
-			Expresion e = new Expresion(expAritmetica);
-			return e;
+			return expAritmetica;
 		}
 
 		ExpresionRelacional expresionRelacional = esExpresionRelacional();
 		if (expresionRelacional != null) {
-			Expresion e = new Expresion(expresionRelacional);
-			return e;
+			return expresionRelacional;
 		}
 
 		ExpresionLogica expresionLogica = esExpresionLogica();
 		if (expresionLogica != null) {
-			Expresion e = new Expresion(expresionLogica);
-			return e;
+			return expresionLogica;
 		}
 
 		return null;
@@ -544,9 +533,10 @@ public class AnalizadorSintactico {
 				}
 			} else {
 
-				if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("true")
+				if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+						&& tokenActual.getLexema().equals("verdadero")
 						|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
-								&& tokenActual.getLexema().equals("false")) {
+								&& tokenActual.getLexema().equals("falso")) {
 
 					return new ExpresionRelacional(tokenActual);
 
@@ -601,7 +591,7 @@ public class AnalizadorSintactico {
 				if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
 					obtenerSiguienteToken();
 					ExpresionAritmeticaAuxiliar eAux = esExpresionAritmeticaAuxiliar();
-					return new ExpresionAritmetica(eA, eAux);
+					return new ExpresionAritmetica(eA, eAux);				
 				}
 			}
 		}
@@ -667,15 +657,15 @@ public class AnalizadorSintactico {
 	}
 
 	private Retorno esRetorno() {
-
+		
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("retornar")) {
+			
 			Token palabraReservada = tokenActual;
 			obtenerSiguienteToken();
 			Expresion expresion = esExpresion();
 			if (expresion != null) {
-				obtenerSiguienteToken();
-
 				if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+					
 					Token finSentencia = tokenActual;
 					obtenerSiguienteToken();
 					return new Retorno(palabraReservada, expresion, finSentencia);

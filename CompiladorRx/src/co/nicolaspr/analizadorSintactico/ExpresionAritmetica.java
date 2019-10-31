@@ -2,7 +2,7 @@ package co.nicolaspr.analizadorSintactico;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class ExpresionAritmetica {
+public class ExpresionAritmetica extends Expresion{
 
 	private ExpresionAritmetica eA;
 	private ExpresionAritmeticaAuxiliar eAux;

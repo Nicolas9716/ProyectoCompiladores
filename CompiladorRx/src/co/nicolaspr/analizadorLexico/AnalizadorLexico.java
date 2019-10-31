@@ -863,6 +863,8 @@ public class AnalizadorLexico {
 		palabrasReservadas.add("romper");// break
 		palabrasReservadas.add("leer");// lectura
 		palabrasReservadas.add("imprimir");// impresion
+		palabrasReservadas.add("verdadero");
+		palabrasReservadas.add("falso");
 
 	}
 

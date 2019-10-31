@@ -2,7 +2,7 @@ package co.nicolaspr.analizadorSintactico;
 
 import co.nicolaspr.analizadorLexico.Token;
 
-public class ExpresionCadena {
+public class ExpresionCadena extends Expresion{
 	private Token cadena,mas;
 	private Expresion expresion;
 	public ExpresionCadena(Token cadena) {

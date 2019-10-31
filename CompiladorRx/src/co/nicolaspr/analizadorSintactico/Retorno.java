@@ -21,8 +21,10 @@ public class Retorno extends Sentencia{
 	}
 	@Override
 	public DefaultMutableTreeNode getArbolVisual() {
-		// TODO Auto-generated method stub
-		return null;
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Retorno");
+		nodo.add(expresion.getArbolVisual());
+		
+		return nodo;
 	}
 	
 	

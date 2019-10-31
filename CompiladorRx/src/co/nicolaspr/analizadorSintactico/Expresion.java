@@ -2,32 +2,13 @@ package co.nicolaspr.analizadorSintactico;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class Expresion {
-	private ExpresionAritmetica expresionAritmetica;
-	private ExpresionRelacional expresionRelacional;
-	private ExpresionLogica expresionLogica;
-	private ExpresionCadena expresionCadena;
+public abstract class Expresion {
 
-	public Expresion(ExpresionAritmetica expresionAritmetica) {
+	public Expresion() {
 		super();
-		this.expresionAritmetica = expresionAritmetica;
+		// TODO Auto-generated constructor stub
 	}
 
-	public Expresion(ExpresionRelacional expresionRelacional) {
-		super();
-		this.expresionRelacional = expresionRelacional;
-	}
-
-	public Expresion(ExpresionLogica expresionLogica) {
-		super();
-		this.expresionLogica = expresionLogica;
-	}
-
-	public Expresion(ExpresionCadena expresionCadena) {
-		super();
-		this.expresionCadena = expresionCadena;
-	}
-	
 	public DefaultMutableTreeNode getArbolVisual() {
 		return null;
 	}

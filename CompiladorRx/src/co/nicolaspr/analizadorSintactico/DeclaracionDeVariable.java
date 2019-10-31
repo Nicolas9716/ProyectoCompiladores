@@ -4,8 +4,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
 
-public class DeclaracionDeVariable extends Sentencia{
-	private Token tipoDato,identificador,finSentencia;
+public class DeclaracionDeVariable extends Sentencia {
+	private Token tipoDato, identificador, finSentencia;
 
 	public DeclaracionDeVariable(Token tipoDato, Token identificador, Token finSentencia) {
 		super();
@@ -22,9 +22,12 @@ public class DeclaracionDeVariable extends Sentencia{
 
 	@Override
 	public DefaultMutableTreeNode getArbolVisual() {
-		// TODO Auto-generated method stub
-		return null;
+
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Declaracion");
+		nodo.add(new DefaultMutableTreeNode("Tipo Dato: " + tipoDato.getLexema()));
+		nodo.add(new DefaultMutableTreeNode("Nombre Variable: " + identificador.getLexema()));
+
+		return nodo;
 	}
-	
 
 }

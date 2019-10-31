@@ -63,7 +63,7 @@ public class Argumento {
 	public DefaultMutableTreeNode getArbolVisual() {
 		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Argumento");
 		
-		nodo.add(identificador.getArbolVisual());
+		nodo.add(new DefaultMutableTreeNode(identificador.getLexema()));
 
 		return nodo;
 	}

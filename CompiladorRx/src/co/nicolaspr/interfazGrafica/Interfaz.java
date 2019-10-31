@@ -68,6 +68,7 @@ public class Interfaz extends JFrame implements ActionListener {
 		jArea = new JTextArea();
 		jArea.setBounds(20, 90, 300, 300);
 		contentPane.add(jArea);
+		jArea.setText("fun vacio prueba(){ \n }");
 
 		modelo = new DefaultTableModel();
 		modeloDesconocido = new DefaultTableModel();

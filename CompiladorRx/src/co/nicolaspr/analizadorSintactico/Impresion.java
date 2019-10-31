@@ -5,9 +5,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import co.nicolaspr.analizadorLexico.Token;
 
 public class Impresion extends Sentencia {
-	private Token palabrareser,parIzq;
+	private Token palabrareser, parIzq;
 	private Expresion expresion;
-	private Token parDer,finSentencia;
+	private Token parDer, finSentencia;
+
 	public Impresion(Token palabrareser, Token parIzq, Expresion expresion, Token parDer, Token finSentencia) {
 		super();
 		this.palabrareser = palabrareser;
@@ -16,17 +17,25 @@ public class Impresion extends Sentencia {
 		this.parDer = parDer;
 		this.finSentencia = finSentencia;
 	}
+
 	@Override
 	public String toString() {
 		return "Impresion [palabrareser=" + palabrareser + ", parIzq=" + parIzq + ", expresion=" + expresion
 				+ ", parDer=" + parDer + ", finSentencia=" + finSentencia + "]";
 	}
+
 	@Override
 	public DefaultMutableTreeNode getArbolVisual() {
-		// TODO Auto-generated method stub
-		return null;
+
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Impresion");
+		
+		if(expresion != null) {
+		nodo.add(expresion.getArbolVisual());
+		}else {
+			nodo.add(new DefaultMutableTreeNode("Expresion: sin expresion"));
+		}
+
+		return nodo;
 	}
-	
-	
 
 }

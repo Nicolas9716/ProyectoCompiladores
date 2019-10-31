@@ -7,11 +7,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import co.nicolaspr.analizadorLexico.Token;
 
 public class Condicion extends Sentencia {
-	private Token palabraReservada,parIzq;
+	private Token palabraReservada, parIzq;
 	private ExpresionLogica expresionLogica;
-	private Token parDer,llaIzq;
-	private ArrayList<Sentencia>sentencias;
+	private Token parDer, llaIzq;
+	private ArrayList<Sentencia> sentencias;
 	private Token llaDer;
+
 	public Condicion(Token palabraReservada, Token parIzq, ExpresionLogica expresionLogica, Token parDer, Token llaIzq,
 			ArrayList<Sentencia> sentencias, Token llaDer) {
 		super();
@@ -23,19 +24,32 @@ public class Condicion extends Sentencia {
 		this.sentencias = sentencias;
 		this.llaDer = llaDer;
 	}
+
 	@Override
 	public String toString() {
 		return "Condicion [palabraReservada=" + palabraReservada + ", parIzq=" + parIzq + ", expresionLogica="
 				+ expresionLogica + ", parDer=" + parDer + ", llaIzq=" + llaIzq + ", sentencias=" + sentencias
 				+ ", llaDer=" + llaDer + "]";
 	}
+
 	@Override
 	public DefaultMutableTreeNode getArbolVisual() {
-		// TODO Auto-generated method stub
-		return null;
+
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Condicion");
+
+		nodo.add(expresionLogica.getArbolVisual());
+
+		if (sentencias != null) {
+			DefaultMutableTreeNode senten = new DefaultMutableTreeNode("Sentencias");
+			for (Sentencia sentencia : sentencias) {
+				senten.add(sentencia.getArbolVisual());
+			}
+			nodo.add(senten);
+		}else {
+			nodo.add(new DefaultMutableTreeNode("Sentencias : Sin sentencias"));
+		}
+
+		return nodo;
 	}
-	
-	
-	
 
 }
