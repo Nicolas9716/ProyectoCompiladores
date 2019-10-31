@@ -26,6 +26,7 @@ import co.nicolaspr.analizadorLexico.AnalizadorLexico;
 import co.nicolaspr.analizadorLexico.ErrorLexico;
 import co.nicolaspr.analizadorLexico.Token;
 import co.nicolaspr.analizadorSintactico.AnalizadorSintactico;
+import co.nicolaspr.analizadorSintactico.ErrorSintactico;
 import co.nicolaspr.analizadorSintactico.UnidadDeCompilacion;
 
 /**
@@ -44,6 +45,7 @@ public class Interfaz extends JFrame implements ActionListener {
 	private DefaultTableModel modelo, modeloDesconocido, modeloError;
 	private ArrayList<Token> lista;
 	private ArrayList<ErrorLexico> listaError;
+	private ArrayList<ErrorSintactico> listaErrorS;
 	private JPanel contentPane;
 	private JTree arbolVisual;
 	private AnalizadorSintactico analizadorSintactico;
@@ -160,7 +162,7 @@ public class Interfaz extends JFrame implements ActionListener {
 		arbolVisual = new JTree();
 		scrollSintactico = new JScrollPane(arbolVisual);
 		scrollSintactico.setBounds(400, 20, 300, 380);
-		
+
 		contentPane.add(scrollSintactico);
 
 		btnAnalizar = new JButton("Analizar");
@@ -191,19 +193,17 @@ public class Interfaz extends JFrame implements ActionListener {
 			if (!jArea.getText().trim().equals("")) {
 				analizador = new AnalizadorLexico(jArea.getText());
 				analizador.analizar();
-				agregarTokensATabla();
 
 				analizadorSintactico = new AnalizadorSintactico(analizador.getTablaSimbolos());
 				analizadorSintactico.analizar();
 
-				arbolVisual.setModel(new DefaultTreeModel(analizadorSintactico.getUnidadDeCompilacion().getArbolVisual()));
+				arbolVisual
+						.setModel(new DefaultTreeModel(analizadorSintactico.getUnidadDeCompilacion().getArbolVisual()));
+				agregarTokensATabla();
 
 			} else {
 				JOptionPane.showMessageDialog(null, "Escriba algo");
 			}
-
-//			DefaultMutableTreeNode tree = analizadorSintactico.getUnidadDeCompilacion().getArbolVisual();
-//			arbolVisual.setModel(new DefaultTreeModel(tree));
 
 		}
 	}
@@ -218,6 +218,7 @@ public class Interfaz extends JFrame implements ActionListener {
 
 		modelo.setRowCount(0);
 		modeloDesconocido.setRowCount(0);
+		modeloError.setRowCount(0);
 
 		lista = analizador.getTablaSimbolos();
 		for (int i = 0; i < lista.size(); i++) {
@@ -247,6 +248,17 @@ public class Interfaz extends JFrame implements ActionListener {
 
 			modeloError.addRow(fila1);
 		}
+
+		listaErrorS = analizadorSintactico.getListaErrores();
+		for (int i = 0; i < listaErrorS.size(); i++) {
+
+			fila1[0] = listaErrorS.get(i).getMensaje();
+			fila1[1] = listaErrorS.get(i).getFila();
+			fila1[2] = listaErrorS.get(i).getColumna();
+
+			modeloError.addRow(fila1);
+		}
+
 	}
 
 }

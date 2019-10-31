@@ -20,7 +20,7 @@ public class Termino {
 	public DefaultMutableTreeNode getArbolVisual() {
 
 		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Termino");
-		nodo.add(new DefaultMutableTreeNode("Nombre Variable: " + termino.getLexema()));
+		nodo.add(new DefaultMutableTreeNode("Valor: " + termino.getLexema()));
 
 		return nodo;
 	}

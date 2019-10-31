@@ -281,7 +281,6 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
-
 	/**
 	 * <ListaArgumentos> ::= <Argumento>[","<ListaArgumentos>]
 	 */
@@ -313,7 +312,7 @@ public class AnalizadorSintactico {
 		Expresion expresion = esExpresion();
 
 		if (expresion != null) {
-		
+
 			return new Argumento(expresion);
 		}
 
@@ -579,9 +578,10 @@ public class AnalizadorSintactico {
 				}
 			} else {
 
-				if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("true")
+				if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+						&& tokenActual.getLexema().equals("verdadero")
 						|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
-								&& tokenActual.getLexema().equals("false")) {
+								&& tokenActual.getLexema().equals("falso")) {
 
 					return new ExpresionRelacional(tokenActual);
 
@@ -858,6 +858,62 @@ public class AnalizadorSintactico {
 	 */
 	public void setUnidadDeCompilacion(UnidadDeCompilacion unidadDeCompilacion) {
 		this.unidadDeCompilacion = unidadDeCompilacion;
+	}
+
+	/**
+	 * @return the listaTokens
+	 */
+	public ArrayList<Token> getListaTokens() {
+		return listaTokens;
+	}
+
+	/**
+	 * @param listaTokens the listaTokens to set
+	 */
+	public void setListaTokens(ArrayList<Token> listaTokens) {
+		this.listaTokens = listaTokens;
+	}
+
+	/**
+	 * @return the tokenActual
+	 */
+	public Token getTokenActual() {
+		return tokenActual;
+	}
+
+	/**
+	 * @param tokenActual the tokenActual to set
+	 */
+	public void setTokenActual(Token tokenActual) {
+		this.tokenActual = tokenActual;
+	}
+
+	/**
+	 * @return the posicionActual
+	 */
+	public int getPosicionActual() {
+		return posicionActual;
+	}
+
+	/**
+	 * @param posicionActual the posicionActual to set
+	 */
+	public void setPosicionActual(int posicionActual) {
+		this.posicionActual = posicionActual;
+	}
+
+	/**
+	 * @return the listaErrores
+	 */
+	public ArrayList<ErrorSintactico> getListaErrores() {
+		return listaErrores;
+	}
+
+	/**
+	 * @param listaErrores the listaErrores to set
+	 */
+	public void setListaErrores(ArrayList<ErrorSintactico> listaErrores) {
+		this.listaErrores = listaErrores;
 	}
 
 }
