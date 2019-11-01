@@ -261,6 +261,12 @@ public class AnalizadorSintactico {
 			return b;
 		}
 
+		ImpresionInv s = esImpresionInversa();
+		if (s != null) {
+			return s;
+		}
+
+		
 		Retorno e = esRetorno();
 		if (e != null) {
 			return e;
@@ -270,6 +276,12 @@ public class AnalizadorSintactico {
 		if (f != null) {
 			return f;
 		}
+		
+		LeerInv l = esLecturaInversa();
+		if (l != null) {
+			return l;
+		}
+
 
 		Ciclo ciclo = esCiclo();
 		if (ciclo != null) {
@@ -570,6 +582,52 @@ public class AnalizadorSintactico {
 
 	}
 
+	/**
+	 * <esImpresion>::= imprimir "(" [<esExpresion>] ")" ";"
+	 * 
+	 * @return
+	 */
+	private ImpresionInv esImpresionInversa() {
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("imprimirInv")) {
+			Token palabraReservada = tokenActual;
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+				Token parIzq = tokenActual;
+				obtenerSiguienteToken();
+
+				Expresion exp = esExpresion();
+
+				if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+					Token parDer = tokenActual;
+					obtenerSiguienteToken();
+
+					if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+						Token finSentencia = tokenActual;
+						obtenerSiguienteToken();
+						return new ImpresionInv(palabraReservada, parIzq, exp, parDer, finSentencia);
+					} else {
+
+						reportarError("Falta el final de sentencia en la impresion");
+					}
+
+				} else {
+					reportarError("Falta parentesis derecho en la impresion");
+				}
+
+			} else {
+
+				reportarError("Falta parentesis izquierdo en la impresion");
+			}
+
+		}
+
+		return null;
+
+	}
+
+	
 	/**
 	 * <esExpresion>::=
 	 * <esExpresionAritmetica>|<esExpresionRelacional>|<esExpresionCadena>||<esExpresionLogica>
