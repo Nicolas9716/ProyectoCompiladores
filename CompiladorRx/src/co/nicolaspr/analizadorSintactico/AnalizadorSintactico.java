@@ -266,7 +266,6 @@ public class AnalizadorSintactico {
 			return s;
 		}
 
-		
 		Retorno e = esRetorno();
 		if (e != null) {
 			return e;
@@ -276,12 +275,11 @@ public class AnalizadorSintactico {
 		if (f != null) {
 			return f;
 		}
-		
+
 		LeerInv l = esLecturaInversa();
 		if (l != null) {
 			return l;
 		}
-
 
 		Ciclo ciclo = esCiclo();
 		if (ciclo != null) {
@@ -291,6 +289,10 @@ public class AnalizadorSintactico {
 		InvocacionFuncion i = esInvocacion();
 		if (i != null) {
 			return i;
+		}
+		Elevado elevado=esElevado();
+		if(elevado!=null) {
+			return elevado;
 		}
 		Sentencia arreglo = esArreglo();
 
@@ -525,7 +527,6 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
-	
 	/**
 	 * <esCliclo> ::= mientras "(" <esExpresionLogica> ")" "{" [<esListaSentencias>]
 	 * "}"
@@ -664,7 +665,8 @@ public class AnalizadorSintactico {
 	 */
 	private ImpresionInv esImpresionInversa() {
 
-		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("imprimirInv")) {
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+				&& tokenActual.getLexema().equals("imprimirInv")) {
 			Token palabraReservada = tokenActual;
 			obtenerSiguienteToken();
 
@@ -702,7 +704,6 @@ public class AnalizadorSintactico {
 
 	}
 
-	
 	/**
 	 * <esExpresion>::=
 	 * <esExpresionAritmetica>|<esExpresionRelacional>|<esExpresionCadena>||<esExpresionLogica>
@@ -1145,6 +1146,28 @@ public class AnalizadorSintactico {
 		}
 
 		return null;
+	}
+
+	public Elevado esElevado() {
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
+				&& tokenActual.getLexema().equals("elevadoCuadrado")) {
+			Token id = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
+				Token parIzq = tokenActual;
+				obtenerSiguienteToken();
+				ExpresionAritmetica aritmetica = esExpresionAritmetica();
+				if (aritmetica != null) {
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
+						Token parDer = tokenActual;
+						obtenerSiguienteToken();
+						return new Elevado(id,parIzq,aritmetica,parDer);
+					}
+				}
+			}
+		}
+		return null;
+
 	}
 
 	/**

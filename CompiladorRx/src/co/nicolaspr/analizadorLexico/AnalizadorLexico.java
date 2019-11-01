@@ -868,6 +868,7 @@ public class AnalizadorLexico {
 		//inventadas
 		palabrasReservadas.add("leerInv");// lectura inversa
 		palabrasReservadas.add("imprimirInv");// impresion inversa
+		palabrasReservadas.add("elevadoCuadrado");// elevado al cuadrado
 
 	}
 
