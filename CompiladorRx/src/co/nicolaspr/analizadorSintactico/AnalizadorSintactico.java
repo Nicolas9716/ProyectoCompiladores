@@ -280,6 +280,11 @@ public class AnalizadorSintactico {
 		if (i != null) {
 			return i;
 		}
+		Sentencia arreglo = esArreglo();
+
+		if (arreglo != null) {
+			return arreglo;
+		}
 
 		return null;
 	}
@@ -358,6 +363,77 @@ public class AnalizadorSintactico {
 	}
 
 	/**
+	 * <TipoDato> ::= entero | decimal | cadena | logico
+	 */
+	public Token esTipoDato() {
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA) {
+
+			if (tokenActual.getLexema().equals("entero") || tokenActual.getLexema().equals("decimal")
+					|| tokenActual.getLexema().equals("cadena")) {
+
+				return tokenActual;
+			}
+
+		}
+		return null;
+	}
+
+	/*
+	 * <Arreglo>::= "[" "]"TipoDeDato identificador "{" [<ListaArgumentos] "}" ;
+	 */
+	public Sentencia esArreglo() {
+
+		if (tokenActual.getCategoria() == Categoria.CORCHETE_IZQ) {
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.CORCHETE_DER) {
+				obtenerSiguienteToken();
+				if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && esTipoDato() != null) {
+					Token tipo = tokenActual;
+					obtenerSiguienteToken();
+
+					if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+						Token identificador = tokenActual;
+						obtenerSiguienteToken();
+
+						if (tokenActual.getCategoria() == Categoria.LLAVE_IZQ) {
+							obtenerSiguienteToken();
+
+							ArrayList<Argumento> argumentos = esListaArgumentos();
+
+							if (tokenActual.getCategoria() == Categoria.LLAVE_DER) {
+								obtenerSiguienteToken();
+
+								if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+									obtenerSiguienteToken();
+									return new Arreglo(tipo, identificador, argumentos);
+								} else {
+									reportarError("Falta fin de sentencia");
+								}
+							} else {
+								reportarError("Falta cerrar llave del arreglo");
+							}
+						} else {
+							reportarError("Falta abrir llave del arreglo");
+						}
+
+					} else {
+						hacerBTToken(posicionActual - 1);
+						return null;
+					}
+				} else {
+					reportarError("Falta corchete de cierre del arreglo");
+				}
+			} else {
+				reportarError("Falta corchete de apertura del arreglo");
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * <Argumento> ::= <Expresion>
 	 * 
 	 * @return
@@ -404,40 +480,6 @@ public class AnalizadorSintactico {
 
 		return null;
 	}
-	
-	/**
-	 * <esLecturaInversa> ::= leerInv identificador ";"
-	 * 
-	 * @return
-	 */
-	private LeerInv esLecturaInversa() {
-
-		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("leerInv")) {
-			Token palabraReservada = tokenActual;
-			obtenerSiguienteToken();
-
-			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
-				Token id = tokenActual;
-				obtenerSiguienteToken();
-
-				if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
-					Token finSentencia = tokenActual;
-					obtenerSiguienteToken();
-					return new LeerInv(palabraReservada, id, finSentencia);
-				} else {
-					reportarError("Falta el final de sentencia en el leer");
-				}
-
-			} else {
-				reportarError("Falta el identificador de leer");
-			}
-
-		}
-
-		return null;
-	}
-	
-	
 
 	/**
 	 * <esCliclo> ::= mientras "(" <esExpresionLogica> ")" "{" [<esListaSentencias>]
