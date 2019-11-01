@@ -704,6 +704,8 @@ public class AnalizadorSintactico {
 	}
 
 	/**
+	 * <ExpreAritmetica>::="(" <ExpreAritmetica> ")" [<EAAX>] | <ValorNumerico>
+	 * [<EAAX>]
 	 * 
 	 * @return
 	 */
@@ -733,6 +735,9 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <ValorNumerico>::=[<signo>] entero | [<signo>] real | identificar
+	 */
 	private ValorNumerico esValorNumerico() {
 
 		Token Signo = null;
@@ -765,6 +770,9 @@ public class AnalizadorSintactico {
 
 	}
 
+	/**
+	 * <expresionAritmeticaAuxiliar>::=operadorAritmetico<ExpresionAritmetica>[<expresionAritmeticaAuxiliar>]
+	 */
 	private ExpresionAritmeticaAuxiliar esExpresionAritmeticaAuxiliar() {
 
 		if (tokenActual.getCategoria() == Categoria.OPERADOR_ARITMETICO) {
@@ -982,16 +990,19 @@ public class AnalizadorSintactico {
 			tokenActual = listaTokens.get(posicionActual);
 		}
 	}
-/**
- * Metodo para agregar un error a la lista de errores sintacticos
- * @param mensaje
- */
+
+	/**
+	 * Metodo para agregar un error a la lista de errores sintacticos
+	 * 
+	 * @param mensaje
+	 */
 	public void reportarError(String mensaje) {
 		listaErrores.add(new ErrorSintactico(mensaje, tokenActual.getFila(), tokenActual.getColumna()));
 	}
 
 	/**
 	 * Mrtodo que me deja acceder a los datos de la unidad de compílacion
+	 * 
 	 * @return the unidadDeCompilacion
 	 */
 	public UnidadDeCompilacion getUnidadDeCompilacion() {
