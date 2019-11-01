@@ -404,6 +404,40 @@ public class AnalizadorSintactico {
 
 		return null;
 	}
+	
+	/**
+	 * <esLecturaInversa> ::= leerInv identificador ";"
+	 * 
+	 * @return
+	 */
+	private LeerInv esLecturaInversa() {
+
+		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("leerInv")) {
+			Token palabraReservada = tokenActual;
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token id = tokenActual;
+				obtenerSiguienteToken();
+
+				if (tokenActual.getCategoria() == Categoria.FIN_SENTENCIA) {
+					Token finSentencia = tokenActual;
+					obtenerSiguienteToken();
+					return new LeerInv(palabraReservada, id, finSentencia);
+				} else {
+					reportarError("Falta el final de sentencia en el leer");
+				}
+
+			} else {
+				reportarError("Falta el identificador de leer");
+			}
+
+		}
+
+		return null;
+	}
+	
+	
 
 	/**
 	 * <esCliclo> ::= mientras "(" <esExpresionLogica> ")" "{" [<esListaSentencias>]

@@ -865,6 +865,9 @@ public class AnalizadorLexico {
 		palabrasReservadas.add("imprimir");// impresion
 		palabrasReservadas.add("verdadero");
 		palabrasReservadas.add("falso");
+		//inventadas
+		palabrasReservadas.add("leerInv");// lectura inversa
+		palabrasReservadas.add("imprimirInv");// impresion inversa
 
 	}
 
