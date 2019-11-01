@@ -375,6 +375,7 @@ public class AnalizadorSintactico {
 
 	/**
 	 * <esLectura> ::= leer identificador ";"
+	 * 
 	 * @return
 	 */
 	private Leer esLectura() {
@@ -404,6 +405,12 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esCliclo> ::= mientras "(" <esExpresionLogica> ")" "{" [<esListaSentencias>]
+	 * "}"
+	 * 
+	 * @return
+	 */
 	private Ciclo esCiclo() {
 
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("mientras")) {
@@ -456,6 +463,11 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esDeclaracionDeVariable>::= <esTopoDato> identificador ";"
+	 * 
+	 * @return
+	 */
 	private DeclaracionDeVariable esDeclaracionDeVariable() {
 		if (estipoDato()) {
 			Token tipoDato = tokenActual;
@@ -479,6 +491,11 @@ public class AnalizadorSintactico {
 
 	}
 
+	/**
+	 * <esImpresion>::= imprimir "(" [<esExpresion>] ")" ";"
+	 * 
+	 * @return
+	 */
 	private Impresion esImpresion() {
 
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("imprimir")) {
@@ -519,6 +536,12 @@ public class AnalizadorSintactico {
 
 	}
 
+	/**
+	 * <esExpresion>::=
+	 * <esExpresionAritmetica>|<esExpresionRelacional>|<esExpresionCadena>||<esExpresionLogica>
+	 * 
+	 * @return
+	 */
 	private Expresion esExpresion() {
 		int posTokenAux = posicionActual;
 
@@ -561,6 +584,11 @@ public class AnalizadorSintactico {
 
 	}
 
+	/**
+	 * <esExpresionCadena> ::= <cadena> | <cadena> "+" <expresion>
+	 * 
+	 * @return
+	 */
 	private ExpresionCadena esExpresionCadena() {
 
 		if (tokenActual.getCategoria() == Categoria.CADENA_CARACTERES) {
@@ -583,6 +611,13 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esExpresionRelacional> ::= "(" <esExpresionAritmetica> <operadorRelacional>
+	 * <esExpresionAritmetica> | <esExpresionAritmetica> <operadorRelacional>
+	 * <esExpresionAritmetica>| falso |verdadero
+	 * 
+	 * @return
+	 */
 	private ExpresionRelacional esExpresionRelacional() {
 
 		if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
@@ -637,7 +672,7 @@ public class AnalizadorSintactico {
 
 			if (ea != null) {
 				if (tokenActual.getCategoria() == Categoria.OPERADOR_RELACIONAL) {
-					System.out.println("LLEGUAAAAAAA");
+
 					operador = tokenActual;
 
 					obtenerSiguienteToken();
@@ -668,36 +703,13 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
-//	private ExpresionRelacional esExpresionRelacional() {
-//		System.out.println("aaaaa");
-//		ExpresionAritmetica ea = esExpresionAritmetica();
-//
-//		if (ea != null) {
-//
-//			if (tokenActual.getCategoria() == Categoria.OPERADOR_RELACIONAL) {
-//				Token operador = tokenActual;
-//				obtenerSiguienteToken();
-//
-//				ExpresionAritmetica ea1 = esExpresionAritmetica();
-//				if (ea1 != null) {
-//					return new ExpresionRelacional(ea, operador, ea1);
-//				} else {
-//					reportarError("Falta expresion aritmetica");
-//				}
-//			} else {
-//				reportarError("falta operador relacional");
-//			}
-//
-//		}
-//
-//		return null;
-//
-//	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	private ExpresionAritmetica esExpresionAritmetica() {
 
 		if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
-			System.out.println("11111");
 			obtenerSiguienteToken();
 			ExpresionAritmetica eA = esExpresionAritmetica();
 
@@ -771,6 +783,11 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esRetorno>::= retornar <es Expresion> ";"
+	 * 
+	 * @return
+	 */
 	private Retorno esRetorno() {
 
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("retornar")) {
@@ -795,6 +812,11 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esCondicion>::= si "(" <esExoresuinLogica> ")" "{" [<esListaSentencias>] "}"
+	 * 
+	 * @return
+	 */
 	private Condicion esCondicion() {
 
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("si")) {
@@ -847,6 +869,12 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esExpresionLogica>::= "!" <esExpresionRelacional> | <esExpresionRelacional>
+	 * <OperadorLogico> <esExpresionRelacional>
+	 * 
+	 * @return
+	 */
 	private ExpresionLogica esExpresionLogica() {
 
 		if (tokenActual.getCategoria() == Categoria.OPERADOR_LOGICO && tokenActual.getLexema().equals("!")) {
@@ -894,6 +922,11 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esAdignacion>::= identificador <operadorAsignacion> <esTermino> ";"
+	 * 
+	 * @return
+	 */
 	private AsignacionDeVariable esAsignacion() {
 
 		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
@@ -925,6 +958,11 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	/**
+	 * <esTermino>::= numeroEntero|identificador|cadenaCaracteres
+	 * 
+	 * @return
+	 */
 	private Termino esTermino() {
 		if (tokenActual.getCategoria() == Categoria.ENTERO || tokenActual.getCategoria() == Categoria.IDENTIFICADOR
 				|| tokenActual.getCategoria() == Categoria.CADENA_CARACTERES) {
@@ -944,12 +982,16 @@ public class AnalizadorSintactico {
 			tokenActual = listaTokens.get(posicionActual);
 		}
 	}
-
+/**
+ * Metodo para agregar un error a la lista de errores sintacticos
+ * @param mensaje
+ */
 	public void reportarError(String mensaje) {
 		listaErrores.add(new ErrorSintactico(mensaje, tokenActual.getFila(), tokenActual.getColumna()));
 	}
 
 	/**
+	 * Mrtodo que me deja acceder a los datos de la unidad de compílacion
 	 * @return the unidadDeCompilacion
 	 */
 	public UnidadDeCompilacion getUnidadDeCompilacion() {
