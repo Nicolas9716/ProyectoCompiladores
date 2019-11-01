@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Esta clase nos sirve para crear una invocacion de una funcion
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class InvocacionFuncion extends Sentencia {
 	private Token punto, identifi, parIzq;
 	private ArrayList<Argumento> argumentos;

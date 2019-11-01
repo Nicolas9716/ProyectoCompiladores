@@ -6,6 +6,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
 
+/**
+ * Esta clase es la principal del analizador sintactico, es decir la raiz
+ * para el analisis
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class UnidadDeCompilacion {
 	private ArrayList<Funcion> listaFunciones;
 
