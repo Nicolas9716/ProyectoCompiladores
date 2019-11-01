@@ -2,11 +2,16 @@ package co.nicolaspr.analizadorSintactico;
 
 import java.util.ArrayList;
 
-import com.sun.xml.internal.ws.api.addressing.WSEndpointReference.EPRExtension;
 
 import co.nicolaspr.analizadorLexico.Categoria;
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Aqui esta todo lo relacionado en cuanto al analizador sintactico, desde sus
+ * BNF programados, hasta su forma de hacer el analisis
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class AnalizadorSintactico {
 	private ArrayList<Token> listaTokens;
 	private Token tokenActual;
@@ -84,7 +89,7 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <Funcion>::=fun<tipoRetorno>identificador"("[<listaParametro>]")""{"[<listaDeSentencia>]"}"
+	 * <Funcion>::=fun<esTipoDato>identificador"("[<esListaParametro>]")""{"[<esListaDeSentencia>]"}"
 	 * 
 	 * @return
 	 */
@@ -149,7 +154,10 @@ public class AnalizadorSintactico {
 
 		return null;
 	}
-
+/**
+ * Metodo que me dice si el token es un tipo de dato
+ * @return true de ser un tipo de dato, false de no ser un tipo de dato
+ */
 	private boolean estipoDato() {
 		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("vacio")
 				|| tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA && tokenActual.getLexema().equals("entero")
@@ -186,7 +194,10 @@ public class AnalizadorSintactico {
 		return parametros;
 
 	}
-
+/**
+ * <esParametro>::= <esTipoDato> identificador
+ * @return
+ */
 	private Parametro esParametro() {
 		if (estipoDato()) {
 			Token tipoDato = tokenActual;
