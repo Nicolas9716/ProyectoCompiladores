@@ -1,5 +1,7 @@
 package co.nicolaspr.analizadorSintactico;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import co.nicolaspr.analizadorLexico.Token;
 
 public class ExpresionCadena extends Expresion{
@@ -16,6 +18,10 @@ public class ExpresionCadena extends Expresion{
 		this.expresion = expresion;
 	}
 	
+	public DefaultMutableTreeNode getArbolVisual() {
+		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Cadena");
+		return nodo;
+	}
 	
 
 }

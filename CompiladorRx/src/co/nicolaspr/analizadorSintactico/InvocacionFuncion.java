@@ -33,17 +33,16 @@ public class InvocacionFuncion extends Sentencia {
 		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Invocación");
 		nodo.add(new DefaultMutableTreeNode("Nombre función: " + identifi.getLexema()));
 
-		if (argumentos == null) {
-			System.out.println("NO ARGU");
-			nodo.add(new DefaultMutableTreeNode("Argumentos: Sin argumentos "));
-		} else {
+		if (argumentos != null) {
 			DefaultMutableTreeNode argu = new DefaultMutableTreeNode("Argumentos");
 
 			for (Argumento argumento : argumentos) {
 				argu.add(argumento.getArbolVisual());
 			}
 			nodo.add(argu);
+		} else {
 
+			nodo.add(new DefaultMutableTreeNode("Argumentos: Sin argumentos "));
 		}
 
 		return nodo;
