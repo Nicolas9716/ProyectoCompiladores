@@ -4,6 +4,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
 
+/**
+ * Esta clase nos ayuda a una expresion relacional
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class ExpresionRelacional extends Expresion {
 
 	private ExpresionAritmetica termino1, termino2;

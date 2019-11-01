@@ -3,7 +3,13 @@ package co.nicolaspr.analizadorSintactico;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Esta clase nos ayuda para crear una impresion, en este caso la forma con la que se le dice al compilador
+ * que esto se quiere mostrar en pantalla
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class Impresion extends Sentencia {
 	private Token palabrareser, parIzq;
 	private Expresion expresion;

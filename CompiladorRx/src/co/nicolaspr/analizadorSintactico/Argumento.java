@@ -3,7 +3,12 @@ package co.nicolaspr.analizadorSintactico;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Esta clase nos ayuda a crear un argumento
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class Argumento {
 
 	private Expresion exp;

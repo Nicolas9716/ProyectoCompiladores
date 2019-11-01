@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Esta clase nos ayuda a crear una condicion
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class Condicion extends Sentencia {
 	private Token palabraReservada, parIzq;
 	private ExpresionLogica expresionLogica;

@@ -7,7 +7,13 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Esta clase nos ayuda a crear una lectura, en este caso es lo que decimos para que el compilador identifique
+ * que eso se quiere ingresar
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class Leer extends Sentencia {
 	private Token palabraReservada;
 	private Token id;

@@ -1,5 +1,12 @@
 package co.nicolaspr.analizadorSintactico;
 
+/**
+ * Esta clase nos ayuda en la creacion de un error sintactico para despues
+ * reportarlo
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class ErrorSintactico {
 
 	private String mensaje;

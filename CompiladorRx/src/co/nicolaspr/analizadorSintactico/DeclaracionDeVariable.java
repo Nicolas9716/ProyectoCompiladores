@@ -3,7 +3,12 @@ package co.nicolaspr.analizadorSintactico;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Esta clase nos ayuda a crear una declaracion de variable
+ * 
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class DeclaracionDeVariable extends Sentencia {
 	private Token tipoDato, identificador, finSentencia;
 

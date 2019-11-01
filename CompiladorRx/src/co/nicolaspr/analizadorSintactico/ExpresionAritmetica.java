@@ -1,7 +1,11 @@
 package co.nicolaspr.analizadorSintactico;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-
+/**
+ * Esta clase nos ayuda a crear una expresion aritmetica tradicional en el lenguaje Rx
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class ExpresionAritmetica extends Expresion{
 
 	private ExpresionAritmetica eA;

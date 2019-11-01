@@ -1,7 +1,11 @@
 package co.nicolaspr.analizadorSintactico;
 
 import co.nicolaspr.analizadorLexico.Token;
-
+/**
+ * Esta clase nos sirve para la creacion de Una expresion aritmetica, de distinta forma a la aritmrtica
+ * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
+ * @version 1.0.0
+ */
 public class ExpresionAritmeticaAuxiliar extends Expresion {
 
 	private Token operador;
