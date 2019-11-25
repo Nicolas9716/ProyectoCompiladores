@@ -261,7 +261,7 @@ public class AnalizadorLexico {
 			obtenerSiguienteCaracter();
 			return true;
 		}
-		while (caracterActual != '!') {
+		while (caracterActual != '¡') {
 			lexema += caracterActual;
 			obtenerSiguienteCaracter();
 			if (caracterActual == caracterFinDeCodigo) {
@@ -845,8 +845,8 @@ public class AnalizadorLexico {
 	}
 
 	/**
-	 * Metodo para llenar la lista de las palabras reservadas
-	 * Agregar palabra impresion
+	 * Metodo para llenar la lista de las palabras reservadas Agregar palabra
+	 * impresion
 	 */
 	public void llenarPalabrasReservadas() {
 		palabrasReservadas.add("si");// if
@@ -865,10 +865,9 @@ public class AnalizadorLexico {
 		palabrasReservadas.add("imprimir");// impresion
 		palabrasReservadas.add("verdadero");
 		palabrasReservadas.add("falso");
-		//inventadas
+		// inventadas
 		palabrasReservadas.add("leerInv");// lectura inversa
 		palabrasReservadas.add("imprimirInv");// impresion inversa
-		palabrasReservadas.add("elevadoCuadrado");// elevado al cuadrado
 
 	}
 
