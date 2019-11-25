@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -25,6 +27,8 @@ import javax.swing.tree.DefaultTreeModel;
 import co.nicolaspr.analizadorLexico.AnalizadorLexico;
 import co.nicolaspr.analizadorLexico.ErrorLexico;
 import co.nicolaspr.analizadorLexico.Token;
+import co.nicolaspr.analizadorSemantico.AnalizadorSemantico;
+import co.nicolaspr.analizadorSemantico.Simbolo;
 import co.nicolaspr.analizadorSintactico.AnalizadorSintactico;
 import co.nicolaspr.analizadorSintactico.ErrorSintactico;
 import co.nicolaspr.analizadorSintactico.UnidadDeCompilacion;
@@ -37,19 +41,22 @@ import co.nicolaspr.analizadorSintactico.UnidadDeCompilacion;
  */
 public class Interfaz extends JFrame implements ActionListener {
 
-	private JTextArea jArea;
+	private JTextArea jArea, jAreaSemantica;
 	private JButton btnAnalizar, btnLimpiar;
 	private AnalizadorLexico analizador;
 	private JTable tablaSimbolos, tablaDesconocidos, tablaErrores;
-	private JScrollPane scrollTSimbolos, scrollTDesconocidos, scrollTErrores, scrollSintactico, scrollPestanias;
-	private DefaultTableModel modelo, modeloDesconocido, modeloError;
+	private JScrollPane scrollTSimbolos, scrollTDesconocidos, scrollTErrores, scrollSintactico, scrollPestanias,
+			scrollSemantico, scrollPestanias2;
+	private DefaultTableModel modelo, modeloDesconocido, modeloError, modeloSemantico;
 	private ArrayList<Token> lista;
 	private ArrayList<ErrorLexico> listaError;
 	private ArrayList<ErrorSintactico> listaErrorS;
 	private JPanel contentPane;
 	private JTree arbolVisual;
 	private AnalizadorSintactico analizadorSintactico;
-	private JTabbedPane pestanias;
+	private JTabbedPane pestanias, pestanias2;
+	private AnalizadorSemantico analizadorSemantico;
+	private ArrayList<String> listaSemantica;
 
 	/**
 	 * Costructor de la clase, se inicializan todos los componentes
@@ -75,6 +82,8 @@ public class Interfaz extends JFrame implements ActionListener {
 		modelo = new DefaultTableModel();
 		modeloDesconocido = new DefaultTableModel();
 		modeloError = new DefaultTableModel();
+		modeloSemantico = new DefaultTableModel();
+
 		tablaSimbolos = new JTable(modelo);
 		tablaDesconocidos = new JTable(modeloDesconocido);
 		tablaErrores = new JTable(modeloError);
@@ -145,26 +154,55 @@ public class Interfaz extends JFrame implements ActionListener {
 		contentPane.add(scrollTErrores);
 
 		/**
-		 * Pestañas
+		 * componentes tabla de errores semanticos
 		 */
 
-		pestanias = new JTabbedPane();
+		JLabel lblErroresSemanticos = new JLabel("TABLA DE ERRORES SEMANTICOS");
+		lblErroresSemanticos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblErroresSemanticos.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblErroresSemanticos.setBounds(277, 305, 524, 32);
 
-		pestanias.add("TABLA DE SIMBOLOS VALIDOS", scrollTSimbolos);
-		pestanias.add("TABLA DE SIMBOLOS DESCONOCIDOS", scrollTDesconocidos);
-		pestanias.add("TABLA DE ERRORES", scrollTErrores);
-
-		scrollPestanias = new JScrollPane(pestanias);
-		scrollPestanias.setBounds(20, 420, 600, 150);
-		scrollPestanias.setVisible(true);
-		contentPane.add(scrollPestanias);
-
+		/**
+		 * Arbol visual
+		 */
 		arbolVisual = new JTree();
 		scrollSintactico = new JScrollPane(arbolVisual);
 		scrollSintactico.setBounds(400, 20, 300, 380);
 
-		contentPane.add(scrollSintactico);
+		/**
+		 * Pestañas
+		 */
 
+		pestanias = new JTabbedPane();
+		pestanias.add("SIMBOLOS VALIDOS", scrollTSimbolos);
+		pestanias.add("SIMBOLOS DESCONOCIDOS", scrollTDesconocidos);
+		pestanias.add("ERRORES SINTACTICOS", scrollTErrores);
+
+		scrollPestanias = new JScrollPane(pestanias);
+		scrollPestanias.setBounds(20, 420, 700, 150);
+		scrollPestanias.setVisible(true);
+		contentPane.add(scrollPestanias);
+
+		jAreaSemantica = new JTextArea();
+		jAreaSemantica.setBounds(400, 20, 330, 380);
+
+		scrollSemantico = new JScrollPane(jAreaSemantica);
+		scrollSemantico.setBounds(400, 20, 330, 380);
+		scrollSemantico.setVisible(true);
+		contentPane.add(scrollSemantico);
+
+		pestanias2 = new JTabbedPane();
+		pestanias2.add("ARBOL SINTACTICO", scrollSintactico);
+		pestanias2.add("ERRORES SEMANTICOS", scrollSemantico);
+
+		scrollPestanias2 = new JScrollPane(pestanias2);
+		scrollPestanias2.setBounds(400, 20, 330, 380);
+		scrollPestanias2.setVisible(true);
+		contentPane.add(scrollPestanias2);
+
+		/**
+		 * Botones
+		 */
 		btnAnalizar = new JButton("Analizar");
 		btnAnalizar.setBounds(60, 30, 100, 30);
 		btnAnalizar.addActionListener(this);
@@ -184,13 +222,14 @@ public class Interfaz extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == btnLimpiar) {
-			jArea.setText("");
+
 			modelo.setRowCount(0);
 			modeloDesconocido.setRowCount(0);
 			modeloError.setRowCount(0);
 		}
 		if (e.getSource() == btnAnalizar) {
 			if (!jArea.getText().trim().equals("")) {
+				jAreaSemantica.setText("");
 				analizador = new AnalizadorLexico(jArea.getText());
 				analizador.analizar();
 
@@ -199,6 +238,11 @@ public class Interfaz extends JFrame implements ActionListener {
 
 				arbolVisual
 						.setModel(new DefaultTreeModel(analizadorSintactico.getUnidadDeCompilacion().getArbolVisual()));
+
+				analizadorSemantico = new AnalizadorSemantico(analizadorSintactico.getUnidadDeCompilacion());
+				analizadorSemantico.llenarTablaSimbolos();
+				analizadorSemantico.analizarSemantica();
+
 				agregarTokensATabla();
 
 			} else {
@@ -259,6 +303,46 @@ public class Interfaz extends JFrame implements ActionListener {
 			modeloError.addRow(fila1);
 		}
 
+		listaSemantica = analizadorSemantico.getErroresSemanticos();
+		for (int i = 0; i < listaSemantica.size(); i++) {
+			jAreaSemantica.setText(listaSemantica.get(i).toString());
+		}
+
+	}
+
+	public void traducirCodigo(ActionEvent e) {
+
+		if (analizadorSemantico.getErroresSemanticos().isEmpty() && analizadorSintactico.getListaErrores().isEmpty()
+				&& analizador.getTablaDeErrores().isEmpty()) {
+			String codigo = analizadorSemantico.getUc().getJavaCode();
+			escribirArchivo(codigo);
+
+			try {
+				Process r = Runtime.getRuntime().exec("javac src/Principal.java");
+				r.waitFor();
+				Runtime.getRuntime().exec("java Principal.class");
+
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
+		}
+	}
+
+	public void escribirArchivo(String codigo) {
+
+		String ruta = "src/Principal.java";
+
+		try {
+			FileWriter fis = new FileWriter(ruta);
+			BufferedWriter bw = new BufferedWriter(fis);
+
+			bw.write(codigo);
+			bw.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

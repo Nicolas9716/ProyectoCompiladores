@@ -1,8 +1,11 @@
 package co.nicolaspr.analizadorSintactico;
 
 import co.nicolaspr.analizadorLexico.Token;
+
 /**
- * Esta clase nos sirve para la creacion de Una expresion aritmetica, de distinta forma a la aritmrtica
+ * Esta clase nos sirve para la creacion de Una expresion aritmetica, de
+ * distinta forma a la aritmrtica
+ * 
  * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
  * @version 1.0.0
  */
@@ -64,6 +67,12 @@ public class ExpresionAritmeticaAuxiliar extends Expresion {
 	@Override
 	public String toString() {
 		return "ExpresionAritmeticaAuxiliar [operador=" + operador + ", eA=" + eA + ", eAux=" + eAux + "]";
+	}
+
+	@Override
+	public String getJavaCode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

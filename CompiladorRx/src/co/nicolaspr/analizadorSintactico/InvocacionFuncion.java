@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
+import co.nicolaspr.analizadorSemantico.Simbolo;
+import co.nicolaspr.analizadorSemantico.TablaSimbolos;
+
 /**
  * Esta clase nos sirve para crear una invocacion de una funcion
  * 
@@ -65,6 +68,32 @@ public class InvocacionFuncion extends Sentencia {
 	 */
 	public void setArgumentos(ArrayList<Argumento> argumentos) {
 		this.argumentos = argumentos;
+	}
+
+	@Override
+	protected void crearTablaSimbolo(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
+
+	}
+
+	@Override
+	protected void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
+
+		Simbolo s = tablaSimbolos.buscarSimboloFuncion(identifi.getLexema(), ambito.getTipoParametros());
+
+		if (s == null) {
+			errores.add("La funcion " + identifi.getLexema() + " no ha sido creada");
+		} else {
+			if (!s.getTipoParametros().equals(argumentos)) {
+				errores.add("La funcion" + identifi.getLexema() + "con parametros" + argumentos + "no ha sido creada");
+			}
+		}
+
+	}
+
+	@Override
+	public String getJavaCode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

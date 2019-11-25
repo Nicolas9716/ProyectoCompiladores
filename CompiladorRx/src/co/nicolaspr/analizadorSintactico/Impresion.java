@@ -1,11 +1,16 @@
 package co.nicolaspr.analizadorSintactico;
 
+import java.util.ArrayList;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
+import co.nicolaspr.analizadorSemantico.Simbolo;
+import co.nicolaspr.analizadorSemantico.TablaSimbolos;
+
 /**
- * Esta clase nos ayuda para crear una impresion, en este caso la forma con la que se le dice al compilador
- * que esto se quiere mostrar en pantalla
+ * Esta clase nos ayuda para crear una impresion, en este caso la forma con la
+ * que se le dice al compilador que esto se quiere mostrar en pantalla
  * 
  * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
  * @version 1.0.0
@@ -34,14 +39,32 @@ public class Impresion extends Sentencia {
 	public DefaultMutableTreeNode getArbolVisual() {
 
 		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Impresion");
-		
-		if(expresion != null) {
-		nodo.add(expresion.getArbolVisual());
-		}else {
+
+		if (expresion != null) {
+			nodo.add(expresion.getArbolVisual());
+		} else {
 			nodo.add(new DefaultMutableTreeNode("Expresion: sin expresion"));
 		}
 
 		return nodo;
+	}
+
+	@Override
+	protected void crearTablaSimbolo(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getJavaCode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

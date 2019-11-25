@@ -290,10 +290,6 @@ public class AnalizadorSintactico {
 		if (i != null) {
 			return i;
 		}
-		Elevado elevado=esElevado();
-		if(elevado!=null) {
-			return elevado;
-		}
 		Sentencia arreglo = esArreglo();
 
 		if (arreglo != null) {
@@ -1146,28 +1142,6 @@ public class AnalizadorSintactico {
 		}
 
 		return null;
-	}
-
-	public Elevado esElevado() {
-		if (tokenActual.getCategoria() == Categoria.PALABRA_RESERVADA
-				&& tokenActual.getLexema().equals("elevadoCuadrado")) {
-			Token id = tokenActual;
-			obtenerSiguienteToken();
-			if (tokenActual.getCategoria() == Categoria.PARENTESIS_IZQ) {
-				Token parIzq = tokenActual;
-				obtenerSiguienteToken();
-				ExpresionAritmetica aritmetica = esExpresionAritmetica();
-				if (aritmetica != null) {
-					if (tokenActual.getCategoria() == Categoria.PARENTESIS_DER) {
-						Token parDer = tokenActual;
-						obtenerSiguienteToken();
-						return new Elevado(id,parIzq,aritmetica,parDer);
-					}
-				}
-			}
-		}
-		return null;
-
 	}
 
 	/**

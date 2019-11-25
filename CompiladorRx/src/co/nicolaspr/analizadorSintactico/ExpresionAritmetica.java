@@ -1,12 +1,15 @@
 package co.nicolaspr.analizadorSintactico;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+
 /**
- * Esta clase nos ayuda a crear una expresion aritmetica tradicional en el lenguaje Rx
+ * Esta clase nos ayuda a crear una expresion aritmetica tradicional en el
+ * lenguaje Rx
+ * 
  * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
  * @version 1.0.0
  */
-public class ExpresionAritmetica extends Expresion{
+public class ExpresionAritmetica extends Expresion {
 
 	private ExpresionAritmetica eA;
 	private ExpresionAritmeticaAuxiliar eAux;
@@ -56,6 +59,12 @@ public class ExpresionAritmetica extends Expresion{
 	public DefaultMutableTreeNode getArbolVisual() {
 		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Expresion Aritmética");
 		return nodo;
+	}
+
+	@Override
+	public String getJavaCode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

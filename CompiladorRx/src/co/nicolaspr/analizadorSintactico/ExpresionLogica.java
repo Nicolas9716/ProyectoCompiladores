@@ -3,12 +3,14 @@ package co.nicolaspr.analizadorSintactico;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
+
 /**
  * Esta clase nos ayuda a crear una expresion logica
+ * 
  * @author Darwin Bonilla, Nicolas Rios y Santiago Vargas
  * @version 1.0.0
  */
-public class ExpresionLogica extends Expresion{
+public class ExpresionLogica extends Expresion {
 
 	private ExpresionRelacional exp1, exp2;
 	private Token operador;
@@ -71,6 +73,12 @@ public class ExpresionLogica extends Expresion{
 	public DefaultMutableTreeNode getArbolVisual() {
 		DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Operación Lógica");
 		return nodo;
+	}
+
+	@Override
+	public String getJavaCode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
