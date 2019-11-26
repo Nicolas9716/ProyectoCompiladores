@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ import co.nicolaspr.analizadorSintactico.UnidadDeCompilacion;
 public class Interfaz extends JFrame implements ActionListener {
 
 	private JTextArea jArea, jAreaSemantica;
-	private JButton btnAnalizar, btnLimpiar;
+	private JButton btnAnalizar, btnLimpiar, btnJavaCode;
 	private AnalizadorLexico analizador;
 	private JTable tablaSimbolos, tablaDesconocidos, tablaErrores;
 	private JScrollPane scrollTSimbolos, scrollTDesconocidos, scrollTErrores, scrollSintactico, scrollPestanias,
@@ -204,14 +205,19 @@ public class Interfaz extends JFrame implements ActionListener {
 		 * Botones
 		 */
 		btnAnalizar = new JButton("Analizar");
-		btnAnalizar.setBounds(60, 30, 100, 30);
+		btnAnalizar.setBounds(20, 30, 100, 30);
 		btnAnalizar.addActionListener(this);
 		contentPane.add(btnAnalizar);
 
 		btnLimpiar = new JButton("Limpiar");
-		btnLimpiar.setBounds(190, 30, 100, 30);
+		btnLimpiar.setBounds(140, 30, 100, 30);
 		btnLimpiar.addActionListener(this);
 		contentPane.add(btnLimpiar);
+
+		btnJavaCode = new JButton("Codigo Java");
+		btnJavaCode.setBounds(260, 30, 120, 30);
+		btnJavaCode.addActionListener(this);
+		contentPane.add(btnJavaCode);
 
 	}
 
@@ -247,6 +253,23 @@ public class Interfaz extends JFrame implements ActionListener {
 
 			} else {
 				JOptionPane.showMessageDialog(null, "Escriba algo");
+			}
+
+		}
+		if (e.getSource() == btnJavaCode && analizadorSemantico.getErroresSemanticos().isEmpty()
+				&& analizadorSintactico.getListaErrores().isEmpty() && analizador.getTablaDeErrores().isEmpty()) {
+			System.out.println("exito");
+
+			String codigo = analizadorSemantico.getUc().getJavaCode();
+			escribirArchivo(codigo);
+
+			try {
+				Process r = Runtime.getRuntime().exec("javac src/Principal.java");
+				r.waitFor();
+				Runtime.getRuntime().exec("java Principal.class");
+
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 
 		}
@@ -310,24 +333,24 @@ public class Interfaz extends JFrame implements ActionListener {
 
 	}
 
-	public void traducirCodigo(ActionEvent e) {
-
-		if (analizadorSemantico.getErroresSemanticos().isEmpty() && analizadorSintactico.getListaErrores().isEmpty()
-				&& analizador.getTablaDeErrores().isEmpty()) {
-			String codigo = analizadorSemantico.getUc().getJavaCode();
-			escribirArchivo(codigo);
-
-			try {
-				Process r = Runtime.getRuntime().exec("javac src/Principal.java");
-				r.waitFor();
-				Runtime.getRuntime().exec("java Principal.class");
-
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-
-		}
-	}
+//	public void traducirCodigo(ActionEvent e) {
+//
+//		if (analizadorSemantico.getErroresSemanticos().isEmpty() && analizadorSintactico.getListaErrores().isEmpty()
+//				&& analizador.getTablaDeErrores().isEmpty()) {
+//			String codigo = analizadorSemantico.getUc().getJavaCode();
+//			escribirArchivo(codigo);
+//
+//			try {
+//				Process r = Runtime.getRuntime().exec("javac src/Principal.java");
+//				r.waitFor();
+//				Runtime.getRuntime().exec("java Principal.class");
+//
+//			} catch (Exception e2) {
+//				e2.printStackTrace();
+//			}
+//
+//		}
+//	}
 
 	public void escribirArchivo(String codigo) {
 
@@ -338,6 +361,7 @@ public class Interfaz extends JFrame implements ActionListener {
 			BufferedWriter bw = new BufferedWriter(fis);
 
 			bw.write(codigo);
+			bw.flush();
 			bw.close();
 
 		} catch (Exception e) {
