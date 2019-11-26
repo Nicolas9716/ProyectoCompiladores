@@ -62,7 +62,7 @@ public class UnidadDeCompilacion {
 
 	public String getJavaCode() {
 
-		String codigo = "import javax.swing.JOptionPana; public class Principal{";
+		String codigo = "import javax.swing.JOptionPane;\n public class Principal {\n 	public static void main(String[] args) {} \n";
 
 		for (Funcion funcion : listaFunciones) {
 

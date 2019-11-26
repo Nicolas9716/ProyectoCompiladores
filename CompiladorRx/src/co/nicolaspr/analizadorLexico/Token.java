@@ -63,6 +63,7 @@ public class Token {
 	}
 
 	public String getJavaCode() {
+		String codigo = "";
 
 		if (categoria == Categoria.PALABRA_RESERVADA) {
 			if (lexema.equals("entero")) {
@@ -78,7 +79,10 @@ public class Token {
 				return "boolean";
 			}
 		} else if (categoria == Categoria.CADENA_CARACTERES) {
-			return lexema.replaceAll("¡", "\"");
+			codigo = lexema.replaceAll("¡", "\"");
+			codigo = codigo.replaceAll("!", "\"");
+			return codigo;
+
 		}
 		return lexema;
 	}

@@ -122,7 +122,7 @@ public class Funcion {
 			tipoR = tipoRetorno.getJavaCode();
 		}
 
-		String codigo = "public  static " + tipoRetorno.getJavaCode() + " " + identificador.getJavaCode() + "(";
+		String codigo = "	public  static " + tipoRetorno.getJavaCode() + " " + identificador.getJavaCode() + "(";
 
 		if (parametros.size() > 0) {
 			for (Parametro parametro : parametros) {
@@ -136,7 +136,7 @@ public class Funcion {
 			codigo += sentencia.getJavaCode();
 
 		}
-		codigo += "}";
+		codigo += "}\n";
 
 		return codigo;
 	}

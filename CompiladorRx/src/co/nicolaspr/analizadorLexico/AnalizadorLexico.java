@@ -265,7 +265,7 @@ public class AnalizadorLexico {
 			lexema += caracterActual;
 			obtenerSiguienteCaracter();
 			if (caracterActual == caracterFinDeCodigo) {
-				tablaDeErrores.add(new ErrorLexico("No cerro con _", filaActual, columnaActual));
+				tablaDeErrores.add(new ErrorLexico("No cerro con !", filaActual, columnaActual));
 				return true;
 			}
 		}

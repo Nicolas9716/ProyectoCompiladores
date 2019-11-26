@@ -96,8 +96,13 @@ public class ExpresionRelacional extends Expresion {
 
 	@Override
 	public String getJavaCode() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigo="";
+		if(termino!=null) {
+			codigo=termino.getJavaCode();
+		}else {
+			codigo=termino1.getJavaCode()+operador.getJavaCode()+termino2.getJavaCode();
+		}
+		return codigo;
 	}
 
 }

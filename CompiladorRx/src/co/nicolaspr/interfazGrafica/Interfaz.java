@@ -333,24 +333,6 @@ public class Interfaz extends JFrame implements ActionListener {
 
 	}
 
-//	public void traducirCodigo(ActionEvent e) {
-//
-//		if (analizadorSemantico.getErroresSemanticos().isEmpty() && analizadorSintactico.getListaErrores().isEmpty()
-//				&& analizador.getTablaDeErrores().isEmpty()) {
-//			String codigo = analizadorSemantico.getUc().getJavaCode();
-//			escribirArchivo(codigo);
-//
-//			try {
-//				Process r = Runtime.getRuntime().exec("javac src/Principal.java");
-//				r.waitFor();
-//				Runtime.getRuntime().exec("java Principal.class");
-//
-//			} catch (Exception e2) {
-//				e2.printStackTrace();
-//			}
-//
-//		}
-//	}
 
 	public void escribirArchivo(String codigo) {
 

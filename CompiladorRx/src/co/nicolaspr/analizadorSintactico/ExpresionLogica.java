@@ -77,8 +77,14 @@ public class ExpresionLogica extends Expresion {
 
 	@Override
 	public String getJavaCode() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigo="";
+		if(operador.getLexema()!="!") {
+			codigo= exp1.getJavaCode() + operador.getJavaCode() + exp2.getJavaCode();	
+		}
+		else {
+			codigo=operador.getJavaCode() + exp1.getJavaCode();
+		}
+		return codigo;
 	}
 
 }
