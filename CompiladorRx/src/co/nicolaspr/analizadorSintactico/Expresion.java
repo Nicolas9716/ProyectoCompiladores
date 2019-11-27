@@ -1,6 +1,13 @@
 package co.nicolaspr.analizadorSintactico;
 
+import java.util.ArrayList;
+
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import co.nicolaspr.analizadorSemantico.Simbolo;
+import co.nicolaspr.analizadorSemantico.TablaSimbolos;
+
+
 
 /**
  * Esta clase me ayuda a crear una expresion
@@ -20,5 +27,8 @@ public abstract class Expresion {
 	}
 
 	public abstract String getJavaCode();
+
+	public abstract void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito);
+
 
 }

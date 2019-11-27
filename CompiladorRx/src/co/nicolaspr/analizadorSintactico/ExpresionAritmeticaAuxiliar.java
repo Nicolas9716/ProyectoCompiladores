@@ -1,6 +1,10 @@
 package co.nicolaspr.analizadorSintactico;
 
+import java.util.ArrayList;
+
 import co.nicolaspr.analizadorLexico.Token;
+import co.nicolaspr.analizadorSemantico.Simbolo;
+import co.nicolaspr.analizadorSemantico.TablaSimbolos;
 
 /**
  * Esta clase nos sirve para la creacion de Una expresion aritmetica, de
@@ -71,8 +75,14 @@ public class ExpresionAritmeticaAuxiliar extends Expresion {
 
 	@Override
 	public String getJavaCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		return eA.getJavaCode() + operador.getJavaCode() + eAux.getJavaCode();
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

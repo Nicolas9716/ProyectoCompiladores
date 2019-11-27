@@ -1,8 +1,12 @@
 package co.nicolaspr.analizadorSintactico;
 
+import java.util.ArrayList;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
+import co.nicolaspr.analizadorSemantico.Simbolo;
+import co.nicolaspr.analizadorSemantico.TablaSimbolos;
 
 /**
  * Esta clase nos ayuda a una expresion relacional
@@ -96,13 +100,26 @@ public class ExpresionRelacional extends Expresion {
 
 	@Override
 	public String getJavaCode() {
-		String codigo="";
-		if(termino!=null) {
-			codigo=termino.getJavaCode();
-		}else {
-			codigo=termino1.getJavaCode()+operador.getJavaCode()+termino2.getJavaCode();
+		String codigo = "";
+		if (termino != null) {
+			codigo = termino.getJavaCode();
+		} else {
+			codigo = termino1.getJavaCode() + operador.getJavaCode() + termino2.getJavaCode();
 		}
 		return codigo;
+	}
+
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
+
+		if (termino1 != null) {
+			termino1.analizarSemantica(tablaSimbolos, errores, ambito);
+		}
+
+		if (termino2 != null) {
+			termino2.analizarSemantica(tablaSimbolos, errores, ambito);
+		}
+
 	}
 
 }

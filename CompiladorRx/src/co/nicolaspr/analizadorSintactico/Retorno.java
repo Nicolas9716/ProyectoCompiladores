@@ -48,13 +48,33 @@ public class Retorno extends Sentencia {
 
 	@Override
 	protected void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
-		// TODO Auto-generated method stub
 
+		if (!ambito.getTipo().equals("vacio")) {
+
+			expresion.analizarSemantica(tablaSimbolos, errores, ambito);
+
+			boolean v1 = expresion instanceof ExpresionAritmetica;
+			boolean v2 = expresion instanceof ExpresionLogica;
+			boolean v3 = expresion instanceof ExpresionRelacional;
+			boolean v4 = expresion instanceof ExpresionCadena;
+
+			if (v1 && (!ambito.getTipo().equals("entero") && !ambito.getTipo().equals("decimal"))) {
+				errores.add("El tipo de retorno no coincide");
+			} else if (v2 && !ambito.getTipo().equals("logico")) {
+				errores.add("El tipo de retorno no coincide");
+			} else if (v3 && !ambito.getTipo().equals("logico")) {
+				errores.add("El tipo de retorno no coincide");
+			} else if (v4 && !ambito.getTipo().equals("cadena")) {
+				errores.add("El tipo de retorno no coincide");
+			}
+
+		}
 	}
 
 	@Override
 	public String getJavaCode() {
-		return palabraReservada.getJavaCode() + expresion.getJavaCode() + finSentencia.getJavaCode();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

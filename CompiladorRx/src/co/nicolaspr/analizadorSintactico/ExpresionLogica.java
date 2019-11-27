@@ -1,8 +1,12 @@
 package co.nicolaspr.analizadorSintactico;
 
+import java.util.ArrayList;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import co.nicolaspr.analizadorLexico.Token;
+import co.nicolaspr.analizadorSemantico.Simbolo;
+import co.nicolaspr.analizadorSemantico.TablaSimbolos;
 
 /**
  * Esta clase nos ayuda a crear una expresion logica
@@ -77,14 +81,26 @@ public class ExpresionLogica extends Expresion {
 
 	@Override
 	public String getJavaCode() {
-		String codigo="";
-		if(operador.getLexema()!="!") {
-			codigo= exp1.getJavaCode() + operador.getJavaCode() + exp2.getJavaCode();	
-		}
-		else {
-			codigo=operador.getJavaCode() + exp1.getJavaCode();
+		String codigo = "";
+		if (operador.getLexema() != "!") {
+			codigo = exp1.getJavaCode() + operador.getJavaCode() + exp2.getJavaCode();
+		} else {
+			codigo = operador.getJavaCode() + exp1.getJavaCode();
 		}
 		return codigo;
+	}
+
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> errores, Simbolo ambito) {
+
+		if (exp1 != null) {
+			exp1.analizarSemantica(tablaSimbolos, errores, ambito);
+		}
+
+		if (exp2 != null) {
+			exp2.analizarSemantica(tablaSimbolos, errores, ambito);
+		}
+
 	}
 
 }
