@@ -63,8 +63,13 @@ public class ExpresionAritmetica extends Expresion {
 
 	@Override
 	public String getJavaCode() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigo="";
+		if(vl!=null) {
+			codigo= vl.getJavaCode()+eAux.getJavaCode();
+		}else {
+			codigo=eA.getJavaCode()+eAux.getJavaCode();
+		}
+		return codigo;
 	}
 
 }

@@ -71,8 +71,8 @@ public class ExpresionAritmeticaAuxiliar extends Expresion {
 
 	@Override
 	public String getJavaCode() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return eA.getJavaCode() + operador.getJavaCode() + eAux.getJavaCode();
 	}
 
 }

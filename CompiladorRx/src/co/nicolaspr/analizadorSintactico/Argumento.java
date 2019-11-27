@@ -39,4 +39,8 @@ public class Argumento {
 		return nodo;
 	}
 
+	public String getJavaCode() {
+		return exp.getJavaCode();
+	}
+
 }

@@ -61,8 +61,7 @@ public class AsignacionDeVariable extends Sentencia {
 
 	@Override
 	public String getJavaCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return identificador.getJavaCode()+opAsignacion.getJavaCode()+termino.getJavaCode()+finSentencia.getJavaCode();
 	}
 
 }

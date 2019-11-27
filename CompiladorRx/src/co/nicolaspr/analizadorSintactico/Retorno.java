@@ -54,8 +54,7 @@ public class Retorno extends Sentencia {
 
 	@Override
 	public String getJavaCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return palabraReservada.getJavaCode() + expresion.getJavaCode() + finSentencia.getJavaCode();
 	}
 
 }

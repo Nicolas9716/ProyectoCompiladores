@@ -78,6 +78,9 @@ public class Token {
 			if (lexema.equals("logico")) {
 				return "boolean";
 			}
+			if (lexema.equals("retornar")) {
+				return "return";
+			}
 		} else if (categoria == Categoria.CADENA_CARACTERES) {
 			codigo = lexema.replaceAll("¡", "\"");
 			codigo = codigo.replaceAll("!", "\"");

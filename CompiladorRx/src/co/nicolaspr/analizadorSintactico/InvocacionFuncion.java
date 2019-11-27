@@ -92,8 +92,18 @@ public class InvocacionFuncion extends Sentencia {
 
 	@Override
 	public String getJavaCode() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigo = identifi.getJavaCode() + parIzq.getJavaCode();
+		if (argumentos != null) {
+			for (int i = 0; i < argumentos.size(); i++) {
+				if (i == argumentos.size() - 1) {
+					codigo += argumentos.get(i).getJavaCode();
+				} else {
+					codigo += argumentos.get(i).getJavaCode() + ";";
+				}
+			}
+		}
+		codigo += parDer.getJavaCode() + finSentencia.getJavaCode();
+		return codigo;
 	}
 
 }

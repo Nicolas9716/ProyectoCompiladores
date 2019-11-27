@@ -46,4 +46,14 @@ public class ValorNumerico {
 		Tipo = tipo;
 	}
 
+	public String getJavaCode() {
+		String codigo="";
+		if(signo.getLexema().equals("-")) {
+			codigo=signo.getJavaCode()+Tipo.getJavaCode();
+		}else {
+			codigo=Tipo.getJavaCode();
+		}
+		return codigo;
+	}
+
 }

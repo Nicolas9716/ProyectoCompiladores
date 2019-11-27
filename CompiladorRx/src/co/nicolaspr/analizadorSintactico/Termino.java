@@ -31,4 +31,8 @@ public class Termino {
 		return nodo;
 	}
 
+	public String getJavaCode() {
+		return termino.getJavaCode();
+	}
+
 }
